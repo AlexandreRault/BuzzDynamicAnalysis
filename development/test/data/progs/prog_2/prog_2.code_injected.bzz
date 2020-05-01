@@ -1,0 +1,46 @@
+function check_rc_wp() {
+    log("probe begin function check_rc_wp (1, 9)");
+    if (firsttimeinwp) {
+        log("probe call function stigmergy.create (3, 35)");
+        var temp_inject_var_2 = stigmergy.create(WP_STIG);
+        v_wp = temp_inject_var_2;
+        log("probe call function storegoal (6, 36)");
+        storegoal(pose.position.latitude, pose.position.longitude, pose.position.altitude);
+        firsttimeinwp = 0;
+    } 
+    if (rc_goto.id != -1) {
+        if (rc_goto.id == id) {
+            wpreached = 0;
+            log("probe call function storegoal (14, 36)");
+            storegoal(rc_goto.latitude, rc_goto.longitude, pose.position.altitude);
+            log("probe return end function check_rc_wp");
+            return;
+        } else {
+            log("probe call function packWP2i (19, 19)");
+            var temp_inject_var_1 = packWP2i(rc_goto.latitude, rc_goto.longitude, 0);
+            var ls = temp_inject_var_1;
+            if (rc_goto.id > 49) {
+                log("probe call function v_wp.get (21, 37)");
+                var temp_inject_var_0 = v_wp.get(WPtab_id);
+                WPtab = temp_inject_var_0;
+                if (WPtab != nil) 
+                    WPtab[rc_goto.id] = ls;
+                else {
+                    WPtab = {};
+                    WPtab[rc_goto.id] = ls;
+                } 
+                log("probe call function v_wp.put (28, 31)");
+                v_wp.put(WPtab_id, WPtab);
+            } else {
+                log("probe call function v_wp.put (30, 34)");
+                v_wp.put(rc_goto.id, ls);
+            } 
+            log("probe call function reset_rc (31, 17)");
+            reset_rc();
+        } 
+    } else {
+        log("probe call function v_wp.get (34, 14)");
+        v_wp.get(0);
+    } 
+    log("probe end function check_rc_wp");
+} 

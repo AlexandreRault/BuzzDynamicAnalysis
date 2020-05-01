@@ -1,0 +1,6 @@
+ALEX = 8;
+BARRIER_VSTIG = 101;
+GLOB_X = GLOB_Y;
+function something(param1, param2) {
+    l(t());
+} 

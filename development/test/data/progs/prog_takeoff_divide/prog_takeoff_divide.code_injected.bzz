@@ -1,0 +1,353 @@
+TARGETDIST_VSTIG = 2;
+ROBOTS = 10;
+DISTANCE_MAX = 60000.;
+TARGET_KIN = 100.;
+EPSILON_KIN = 100.;
+TARGET_NONKIN = 300.;
+EPSILON_NONKIN = 250.;
+function calc_lj(dist, target, epsilon) {
+    log("probe begin function calc_lj (30, 9)");
+    var temp_inject_var_33 = -(epsilon / dist) * ((target / dist)^4 - (target / dist)^2);
+    log("probe return end function calc_lj");
+    return temp_inject_var_33;
+    log("probe end function calc_lj");
+} 
+function to_lj_kin(rid, data) {
+    log("probe begin function to_lj_kin (37, 9)");
+    var lj;
+    log("probe call function calc_lj (39, 53)");
+    var temp_inject_var_32 = calc_lj(data.distance, TARGET_KIN, EPSILON_KIN);
+    lj = temp_inject_var_32;
+    log("probe call function math.cos (40, 37)");
+    var temp_inject_var_31 = math.cos(data.azimuth);
+    data.x = lj * temp_inject_var_31;
+    log("probe call function math.sin (41, 37)");
+    var temp_inject_var_30 = math.sin(data.azimuth);
+    data.y = lj * temp_inject_var_30;
+    log("probe return end function to_lj_kin");
+    return data;
+    log("probe end function to_lj_kin");
+} 
+function to_lj_nonkin(rid, data) {
+    log("probe begin function to_lj_nonkin (48, 9)");
+    var lj;
+    log("probe call function calc_lj (50, 59)");
+    var temp_inject_var_29 = calc_lj(data.distance, TARGET_NONKIN, EPSILON_NONKIN);
+    lj = temp_inject_var_29;
+    log("probe call function math.cos (51, 37)");
+    var temp_inject_var_28 = math.cos(data.azimuth);
+    data.x = lj * temp_inject_var_28;
+    log("probe call function math.sin (52, 37)");
+    var temp_inject_var_27 = math.sin(data.azimuth);
+    data.y = lj * temp_inject_var_27;
+    log("probe return end function to_lj_nonkin");
+    return data;
+    log("probe end function to_lj_nonkin");
+} 
+function vec2_sum(rid, data, accum) {
+    log("probe begin function vec2_sum (59, 9)");
+    accum.x = accum.x + data.x;
+    accum.y = accum.y + data.y;
+    log("probe return end function vec2_sum");
+    return accum;
+    log("probe end function vec2_sum");
+} 
+function flock() {
+    log("probe begin function flock (68, 9)");
+    var accum = {};
+    accum.x = 0;
+    accum.y = 0;
+    log("probe call function neighbors.kin (74, 24)");
+    var temp_inject_var_24 = neighbors.kin();
+    log("probe call function temp_inject_var_24.map (74, 39)");
+    var temp_inject_var_25 = temp_inject_var_24.map(to_lj_kin);
+    log("probe call function temp_inject_var_25.reduce (74, 63)");
+    var temp_inject_var_26 = temp_inject_var_25.reduce(vec2_sum, accum);
+    accum = temp_inject_var_26;
+    log("probe call function neighbors.nonkin (75, 27)");
+    var temp_inject_var_21 = neighbors.nonkin();
+    log("probe call function temp_inject_var_21.map (75, 45)");
+    var temp_inject_var_22 = temp_inject_var_21.map(to_lj_nonkin);
+    log("probe call function temp_inject_var_22.reduce (75, 69)");
+    var temp_inject_var_23 = temp_inject_var_22.reduce(vec2_sum, accum);
+    accum = temp_inject_var_23;
+    log("probe call function neighbors.count (76, 21)");
+    var temp_inject_var_20 = neighbors.count();
+    if (temp_inject_var_20 > 0) {
+        log("probe call function neighbors.count (77, 40)");
+        var temp_inject_var_19 = neighbors.count();
+        accum.x = accum.x / temp_inject_var_19;
+        log("probe call function neighbors.count (78, 40)");
+        var temp_inject_var_18 = neighbors.count();
+        accum.y = accum.y / temp_inject_var_18;
+    } 
+    log("probe call function goto (81, 23)");
+    goto(accum.x, accum.y);
+    log("probe end function flock");
+} 
+BARRIER_VSTIG = 1;
+function barrier_set(threshold, transf) {
+    log("probe begin function barrier_set (98, 9)");
+    statef = function() {
+        log("probe call function barrier_wait (100, 34)");
+        barrier_wait(threshold, transf);
+    } ;
+    log("probe call function stigmergy.create (102, 42)");
+    var temp_inject_var_17 = stigmergy.create(BARRIER_VSTIG);
+    barrier = temp_inject_var_17;
+    statestr = "barrier";
+    log("probe end function barrier_set");
+} 
+function barrier_ready() {
+    log("probe begin function barrier_ready (109, 9)");
+    log("probe call function barrier.put (110, 19)");
+    barrier.put(id, 1);
+    log("probe end function barrier_ready");
+} 
+function barrier_wait(threshold, transf) {
+    log("probe begin function barrier_wait (116, 9)");
+    log("probe call function barrier.get (117, 16)");
+    barrier.get(id);
+    log("probe call function barrier.size (118, 26)");
+    var temp_inject_var_16 = barrier.size();
+    extradbg = temp_inject_var_16;
+    log("probe call function barrier.size (119, 18)");
+    var temp_inject_var_15 = barrier.size();
+    if (temp_inject_var_15 >= threshold) {
+        barrier = nil;
+        log("probe call function transf (121, 11)");
+        transf();
+    } 
+    log("probe end function barrier_wait");
+} 
+TARGET_NOCOLOR = 0;
+TARGET_RED = 1;
+TARGET_GREEN = 2;
+TARGET_BLUE = 3;
+function isred(c) {
+    log("probe begin function isred (139, 9)");
+    var temp_inject_var_14 = (c.red == 255 and c.green == 0 and c.blue == 0);
+    log("probe return end function isred");
+    return temp_inject_var_14;
+    log("probe end function isred");
+} 
+function isgreen(c) {
+    log("probe begin function isgreen (143, 9)");
+    var temp_inject_var_13 = (c.red == 0 and c.green == 255 and c.blue == 0);
+    log("probe return end function isgreen");
+    return temp_inject_var_13;
+    log("probe end function isgreen");
+} 
+function isblue(c) {
+    log("probe begin function isblue (147, 9)");
+    var temp_inject_var_12 = (c.red == 0 and c.green == 0 and c.blue == 255);
+    log("probe return end function isblue");
+    return temp_inject_var_12;
+    log("probe end function isblue");
+} 
+function color_to_code(c) {
+    log("probe begin function color_to_code (151, 9)");
+    log("probe call function isred (152, 12)");
+    var temp_inject_var_11 = isred(c);
+    if (temp_inject_var_11) {
+        log("probe return end function color_to_code");
+        return TARGET_RED;
+    } 
+    log("probe call function isgreen (153, 14)");
+    var temp_inject_var_10 = isgreen(c);
+    if (temp_inject_var_10) {
+        log("probe return end function color_to_code");
+        return TARGET_GREEN;
+    } 
+    log("probe call function isblue (154, 13)");
+    var temp_inject_var_9 = isblue(c);
+    if (temp_inject_var_9) {
+        log("probe return end function color_to_code");
+        return TARGET_BLUE;
+    } 
+    log("probe return end function color_to_code");
+    return TARGET_NOCOLOR;
+    log("probe end function color_to_code");
+} 
+function state_takeoff() {
+    log("probe begin function state_takeoff (167, 9)");
+    log("probe call function takeoff (168, 17)");
+    var temp_inject_var_8 = takeoff();
+    if (not temp_inject_var_8) {
+        log("probe call function barrier_set (169, 55)");
+        barrier_set(ROBOTS, transition_to_search_for_target);
+        log("probe call function barrier_ready (170, 18)");
+        barrier_ready();
+    } 
+    log("probe end function state_takeoff");
+} 
+function transition_to_search_for_target() {
+    log("probe begin function transition_to_search_for_target (177, 9)");
+    statef = state_search_for_target;
+    statestr = "search_for_target";
+    yaw_start = pose.orientation.yaw % (2. * math.pi);
+    log("probe call function camera_enable (181, 16)");
+    camera_enable();
+    mytargetdata = {};
+    mytargetdata.dist = DISTANCE_MAX;
+    mytargetdata.color = TARGET_NOCOLOR;
+    mytargetdata.closest = nil;
+    log("probe end function transition_to_search_for_target");
+} 
+function state_search_for_target() {
+    log("probe begin function state_search_for_target (191, 9)");
+    log("probe call function size (193, 15)");
+    var temp_inject_var_7 = size(blobs);
+    if (temp_inject_var_7 == 0) {
+        var cur_yaw = pose.orientation.yaw % (2. * math.pi);
+        var yaw_diff = (cur_yaw - yaw_start) % (2. * math.pi);
+        if (yaw_diff >= (0.95 * 2. * math.pi)) {
+            log("probe call function barrier_set (199, 51)");
+            barrier_set(ROBOTS, transition_to_pick_target);
+            log("probe call function barrier_ready (200, 20)");
+            barrier_ready();
+        } else {
+            log("probe call function rotate (204, 28)");
+            rotate(math.pi / 180.0);
+        } 
+    } else {
+        log("probe call function rotate (208, 14)");
+        rotate(0.0);
+        if (blobs[0].px > 330) {
+            log("probe call function rotate (210, 29)");
+            rotate(-math.pi / 180.0);
+        } else 
+            if (blobs[0].px < 310) {
+                log("probe call function rotate (212, 29)");
+                rotate(math.pi / 180.0);
+            } else {
+                mytargetdata.dist = 0.;
+                log("probe call function color_to_code (216, 55)");
+                var temp_inject_var_6 = color_to_code(blobs[0].color);
+                mytargetdata.color = temp_inject_var_6;
+                log("probe call function barrier_set (217, 51)");
+                barrier_set(ROBOTS, transition_to_pick_target);
+                log("probe call function barrier_ready (218, 20)");
+                barrier_ready();
+            } 
+    } 
+    log("probe end function state_search_for_target");
+} 
+function transition_to_pick_target() {
+    log("probe begin function transition_to_pick_target (226, 9)");
+    statef = state_pick_target;
+    statestr = "pick_target";
+    log("probe call function stigmergy.create (229, 48)");
+    var temp_inject_var_5 = stigmergy.create(TARGETDIST_VSTIG);
+    targetdist = temp_inject_var_5;
+    if (mytargetdata.dist < DISTANCE_MAX) {
+        log("probe call function targetdist.put (233, 35)");
+        targetdist.put(id, mytargetdata);
+        log("probe call function barrier_set (235, 44)");
+        barrier_set(ROBOTS, transition_to_divide);
+        log("probe call function barrier_ready (236, 18)");
+        barrier_ready();
+    } 
+    log("probe end function transition_to_pick_target");
+} 
+function state_pick_target() {
+    log("probe begin function state_pick_target (243, 9)");
+    var params = {};
+    params.dist = mytargetdata.dist;
+    params.color = mytargetdata.color;
+    params.closest = mytargetdata.closest;
+    log("probe call function neighbors.reduce (264, 2)");
+    var temp_inject_var_4 = neighbors.reduce(function(rid, rdata, accum) {
+        log("probe call function targetdist.get (253, 32)");
+        var temp_inject_var_3 = targetdist.get(rid);
+        var d = temp_inject_var_3;
+        if (d != nil) {
+            if (accum.dist > rdata.distance + d.dist) {
+                accum.dist = rdata.distance + d.dist;
+                accum.closest = rid;
+                accum.color = d.color;
+            } 
+        } 
+        return accum;
+    } , params);
+    params = temp_inject_var_4;
+    mytargetdata.closest = params.closest;
+    mytargetdata.color = params.color;
+    mytargetdata.dist = params.dist;
+    log("probe call function targetdist.put (269, 33)");
+    targetdist.put(id, mytargetdata);
+    if (params.dist < DISTANCE_MAX) {
+        log("probe call function barrier_set (272, 44)");
+        barrier_set(ROBOTS, transition_to_divide);
+        log("probe call function barrier_ready (273, 18)");
+        barrier_ready();
+    } else {
+        if (mytargetdata.closest) {
+            log("probe call function neighbors.get (279, 48)");
+            var temp_inject_var_2 = neighbors.get(mytargetdata.closest);
+            var n = temp_inject_var_2;
+            if (n.azimuth > math.pi / 36.0) {
+                log("probe call function rotate (281, 30)");
+                rotate(math.pi / 360.0);
+            } else 
+                if (n.azimuth < -math.pi / 36.0) {
+                    log("probe call function rotate (284, 31)");
+                    rotate(-math.pi / 360.0);
+                } 
+        } 
+    } 
+    log("probe end function state_pick_target");
+} 
+function transition_to_divide() {
+    log("probe begin function transition_to_divide (292, 9)");
+    statef = state_divide;
+    statestr = "divide";
+    log("probe call function swarm.create (295, 32)");
+    var temp_inject_var_1 = swarm.create(TARGET_RED);
+    sred = temp_inject_var_1;
+    log("probe call function sred.select (296, 46)");
+    sred.select(mytargetdata.color == TARGET_RED);
+    log("probe call function swarm.create (297, 34)");
+    var temp_inject_var_0 = swarm.create(TARGET_BLUE);
+    sblue = temp_inject_var_0;
+    log("probe call function sblue.select (298, 48)");
+    sblue.select(mytargetdata.color == TARGET_BLUE);
+    log("probe end function transition_to_divide");
+} 
+function state_divide() {
+    log("probe begin function state_divide (304, 9)");
+    log("probe call function sred.exec (305, 17)");
+    sred.exec(flock);
+    log("probe call function sblue.exec (306, 18)");
+    sblue.exec(flock);
+    log("probe end function state_divide");
+} 
+function transition_to_goto_target() {
+    log("probe begin function transition_to_goto_target (312, 9)");
+    statef = state_goto_target;
+    statestr = "goto_target";
+    log("probe end function transition_to_goto_target");
+} 
+function state_goto_target() {
+    log("probe begin function state_goto_target (320, 9)");
+    log("probe end function state_goto_target");
+} 
+function init() {
+    log("probe begin function init (332, 9)");
+    statef = state_takeoff;
+    statestr = "takeoff";
+    log("probe end function init");
+} 
+function step() {
+    log("probe begin function step (341, 9)");
+    extradbg = "";
+    log("probe call function statef (343, 9)");
+    statef();
+    log("probe call function debug.print (344, 38)");
+    debug.print(statestr, ": ", extradbg);
+    log("probe end function step");
+} 
+function destroy() {
+    log("probe begin function destroy (350, 9)");
+    log("probe end function destroy");
+} 

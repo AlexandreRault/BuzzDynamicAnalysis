@@ -1,0 +1,86 @@
+PARSE (1 0)
+   SCRIPT (2 1)
+      STATLIST (3 2)
+         STAT (4 3)
+         STAT (5 3)
+            COMMAND (6 4)
+               IDREF (7 5)
+                  token (8 6) 0 <ALEX> <identifier>
+               EXPRESSION (9 5)
+                  PRODUCT (10 6)
+                     MODULO (11 7)
+                        POWER (12 8)
+                           BITSHIFT (13 9)
+                              BITWISEANDOR (14 10)
+                                 BITWISENOT (15 11)
+                                    OPERAND (16 12)
+                                       token (17 13) 1 <8> <8>
+                           POWERREST (18 9)
+         STAT (19 3)
+            COMMAND (20 4)
+               IDREF (21 5)
+                  token (22 6) 0 <BARRIER_VSTIG> <identifier>
+               EXPRESSION (23 5)
+                  PRODUCT (24 6)
+                     MODULO (25 7)
+                        POWER (26 8)
+                           BITSHIFT (27 9)
+                              BITWISEANDOR (28 10)
+                                 BITWISENOT (29 11)
+                                    OPERAND (30 12)
+                                       token (31 13) 1 <101> <101>
+                           POWERREST (32 9)
+         STAT (33 3)
+            COMMAND (34 4)
+               IDREF (35 5)
+                  token (36 6) 0 <GLOB_X> <identifier>
+               EXPRESSION (37 5)
+                  PRODUCT (38 6)
+                     MODULO (39 7)
+                        POWER (40 8)
+                           BITSHIFT (41 9)
+                              BITWISEANDOR (42 10)
+                                 BITWISENOT (43 11)
+                                    OPERAND (44 12)
+                                       IDREF (45 13)
+                                          token (46 14) 0 <GLOB_Y> <identifier>
+                           POWERREST (47 9)
+         STAT (48 3)
+            FUNCTION (49 4)
+               token (50 5) 7 <function> <function>
+               token (51 5) 0 <something> <identifier>
+               token (52 5) 22 <(>
+               FORMAL_PARAMETER_LIST (53 5)
+                  token (54 6) 0 <param1> <identifier>
+                  token (55 6) 0 <param2> <identifier>
+               token (56 5) 23 <)>
+               BLOCK (57 5)
+                  token (58 6) 20 <{>
+                  STATLIST (59 6)
+                     STAT (60 7)
+                     STAT (61 7)
+                        COMMAND (62 8)
+                           IDREF (63 9)
+                              token (64 10) 0 <l> <identifier>
+                              CALL (65 10)
+                              ACTUAL_PARAMETER_LIST (66 10)
+                                 CONDITION (67 11)
+                                    COMPARISON (68 12)
+                                       EXPRESSION (69 13)
+                                          PRODUCT (70 14)
+                                             MODULO (71 15)
+                                                POWER (72 16)
+                                                   BITSHIFT (73 17)
+                                                      BITWISEANDOR (74 18)
+                                                         BITWISENOT (75 19)
+                                                            OPERAND (76 20)
+                                                               IDREF (77 21)
+                                                                  token (78 22) 0 <t> <identifier>
+                                                                  CALL (79 22)
+                                                                  ACTUAL_PARAMETER_LIST (80 22)
+                                                                  token (81 22) 23 <)>
+                                                   POWERREST (82 17)
+                              token (83 10) 23 <)>
+                     STAT (84 7)
+                  token (85 6) 21 <}>
+Successful termination

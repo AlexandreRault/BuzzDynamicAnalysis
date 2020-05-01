@@ -1,0 +1,618 @@
+PARSE (1 0)
+   SCRIPT (2 1)
+      STATLIST (3 2)
+         STAT (4 3)
+            FUNCTION (5 4)
+               token (6 5) 7 <function> <function>
+               token (7 5) 0 <check_rc_wp> <identifier>
+               token (8 5) 22 <(>
+               FORMAL_PARAMETER_LIST (9 5)
+               token (10 5) 23 <)>
+               BLOCK (11 5)
+                  token (12 6) 20 <{>
+                  STATLIST (13 6)
+                     STAT (14 7)
+                     STAT (15 7)
+                        IF (16 8)
+                           token (17 9) 5 <if> <if>
+                           token (18 9) 22 <(>
+                           CONDITION (19 9)
+                              COMPARISON (20 10)
+                                 EXPRESSION (21 11)
+                                    PRODUCT (22 12)
+                                       MODULO (23 13)
+                                          POWER (24 14)
+                                             BITSHIFT (25 15)
+                                                BITWISEANDOR (26 16)
+                                                   BITWISENOT (27 17)
+                                                      OPERAND (28 18)
+                                                         IDREF (29 19)
+                                                            token (30 20) 0 <firsttimeinwp> <identifier>
+                                             POWERREST (31 15)
+                           token (32 9) 23 <)>
+                           BLOCKSTAT (33 9)
+                              BLOCK (34 10)
+                                 token (35 11) 20 <{>
+                                 STATLIST (36 11)
+                                    STAT (37 12)
+                                    STAT (38 12)
+                                       COMMAND (39 13)
+                                          IDREF (40 14)
+                                             token (41 15) 0 <v_wp> <identifier>
+                                          EXPRESSION (42 14)
+                                             PRODUCT (43 15)
+                                                MODULO (44 16)
+                                                   POWER (45 17)
+                                                      BITSHIFT (46 18)
+                                                         BITWISEANDOR (47 19)
+                                                            BITWISENOT (48 20)
+                                                               OPERAND (49 21)
+                                                                  IDREF (50 22)
+                                                                     token (51 23) 0 <stigmergy> <identifier>
+                                                                     token (52 23) 0 <create> <identifier>
+                                                                     CALL (53 23)
+                                                                     ACTUAL_PARAMETER_LIST (54 23)
+                                                                        CONDITION (55 24)
+                                                                           COMPARISON (56 25)
+                                                                              EXPRESSION (57 26)
+                                                                                 PRODUCT (58 27)
+                                                                                    MODULO (59 28)
+                                                                                       POWER (60 29)
+                                                                                          BITSHIFT (61 30)
+                                                                                             BITWISEANDOR (62 31)
+                                                                                                BITWISENOT (63 32)
+                                                                                                   OPERAND (64 33)
+                                                                                                      IDREF (65 34)
+                                                                                                         token (66 35) 0 <WP_STIG> <identifier>
+                                                                                          POWERREST (67 30)
+                                                                     token (68 23) 23 <)>
+                                                      POWERREST (69 18)
+                                    STAT (70 12)
+                                       COMMAND (71 13)
+                                          IDREF (72 14)
+                                             token (73 15) 0 <storegoal> <identifier>
+                                             CALL (74 15)
+                                             ACTUAL_PARAMETER_LIST (75 15)
+                                                CONDITION (76 16)
+                                                   COMPARISON (77 17)
+                                                      EXPRESSION (78 18)
+                                                         PRODUCT (79 19)
+                                                            MODULO (80 20)
+                                                               POWER (81 21)
+                                                                  BITSHIFT (82 22)
+                                                                     BITWISEANDOR (83 23)
+                                                                        BITWISENOT (84 24)
+                                                                           OPERAND (85 25)
+                                                                              IDREF (86 26)
+                                                                                 token (87 27) 0 <pose> <identifier>
+                                                                                 token (88 27) 0 <position> <identifier>
+                                                                                 token (89 27) 0 <latitude> <identifier>
+                                                                  POWERREST (90 22)
+                                                CONDITION (91 16)
+                                                   COMPARISON (92 17)
+                                                      EXPRESSION (93 18)
+                                                         PRODUCT (94 19)
+                                                            MODULO (95 20)
+                                                               POWER (96 21)
+                                                                  BITSHIFT (97 22)
+                                                                     BITWISEANDOR (98 23)
+                                                                        BITWISENOT (99 24)
+                                                                           OPERAND (100 25)
+                                                                              IDREF (101 26)
+                                                                                 token (102 27) 0 <pose> <identifier>
+                                                                                 token (103 27) 0 <position> <identifier>
+                                                                                 token (104 27) 0 <longitude> <identifier>
+                                                                  POWERREST (105 22)
+                                                CONDITION (106 16)
+                                                   COMPARISON (107 17)
+                                                      EXPRESSION (108 18)
+                                                         PRODUCT (109 19)
+                                                            MODULO (110 20)
+                                                               POWER (111 21)
+                                                                  BITSHIFT (112 22)
+                                                                     BITWISEANDOR (113 23)
+                                                                        BITWISENOT (114 24)
+                                                                           OPERAND (115 25)
+                                                                              IDREF (116 26)
+                                                                                 token (117 27) 0 <pose> <identifier>
+                                                                                 token (118 27) 0 <position> <identifier>
+                                                                                 token (119 27) 0 <altitude> <identifier>
+                                                                  POWERREST (120 22)
+                                             token (121 15) 23 <)>
+                                    STAT (122 12)
+                                       COMMAND (123 13)
+                                          IDREF (124 14)
+                                             token (125 15) 0 <firsttimeinwp> <identifier>
+                                          EXPRESSION (126 14)
+                                             PRODUCT (127 15)
+                                                MODULO (128 16)
+                                                   POWER (129 17)
+                                                      BITSHIFT (130 18)
+                                                         BITWISEANDOR (131 19)
+                                                            BITWISENOT (132 20)
+                                                               OPERAND (133 21)
+                                                                  token (134 22) 1 <0> <0>
+                                                      POWERREST (135 18)
+                                    STAT (136 12)
+                                 token (137 11) 21 <}>
+                     STAT (138 7)
+                        IF (139 8)
+                           token (140 9) 5 <if> <if>
+                           token (141 9) 22 <(>
+                           CONDITION (142 9)
+                              COMPARISON (143 10)
+                                 EXPRESSION (144 11)
+                                    PRODUCT (145 12)
+                                       MODULO (146 13)
+                                          POWER (147 14)
+                                             BITSHIFT (148 15)
+                                                BITWISEANDOR (149 16)
+                                                   BITWISENOT (150 17)
+                                                      OPERAND (151 18)
+                                                         IDREF (152 19)
+                                                            token (153 20) 0 <rc_goto> <identifier>
+                                                            token (154 20) 0 <id> <identifier>
+                                             POWERREST (155 15)
+                                 REL_OP (156 11)
+                                 token (157 11) 30 <!=> <!=>
+                                 EXPRESSION (158 11)
+                                    PRODUCT (159 12)
+                                       MODULO (160 13)
+                                          POWER (161 14)
+                                             BITSHIFT (162 15)
+                                                BITWISEANDOR (163 16)
+                                                   BITWISENOT (164 17)
+                                                      OPERAND (165 18)
+                                                         UNARY_ARITHM_OP (166 19)
+                                                         token (167 19) 13 <-> <->
+                                                         token (168 19) 1 <1> <1>
+                                             POWERREST (169 15)
+                           token (170 9) 23 <)>
+                           BLOCKSTAT (171 9)
+                              BLOCK (172 10)
+                                 token (173 11) 20 <{>
+                                 STATLIST (174 11)
+                                    STAT (175 12)
+                                    STAT (176 12)
+                                       IF (177 13)
+                                          token (178 14) 5 <if> <if>
+                                          token (179 14) 22 <(>
+                                          CONDITION (180 14)
+                                             COMPARISON (181 15)
+                                                EXPRESSION (182 16)
+                                                   PRODUCT (183 17)
+                                                      MODULO (184 18)
+                                                         POWER (185 19)
+                                                            BITSHIFT (186 20)
+                                                               BITWISEANDOR (187 21)
+                                                                  BITWISENOT (188 22)
+                                                                     OPERAND (189 23)
+                                                                        IDREF (190 24)
+                                                                           token (191 25) 0 <rc_goto> <identifier>
+                                                                           token (192 25) 0 <id> <identifier>
+                                                            POWERREST (193 20)
+                                                REL_OP (194 16)
+                                                token (195 16) 30 <==> <==>
+                                                EXPRESSION (196 16)
+                                                   PRODUCT (197 17)
+                                                      MODULO (198 18)
+                                                         POWER (199 19)
+                                                            BITSHIFT (200 20)
+                                                               BITWISEANDOR (201 21)
+                                                                  BITWISENOT (202 22)
+                                                                     OPERAND (203 23)
+                                                                        IDREF (204 24)
+                                                                           token (205 25) 0 <id> <identifier>
+                                                            POWERREST (206 20)
+                                          token (207 14) 23 <)>
+                                          BLOCKSTAT (208 14)
+                                             BLOCK (209 15)
+                                                token (210 16) 20 <{>
+                                                STATLIST (211 16)
+                                                   STAT (212 17)
+                                                   STAT (213 17)
+                                                      COMMAND (214 18)
+                                                         IDREF (215 19)
+                                                            token (216 20) 0 <wpreached> <identifier>
+                                                         EXPRESSION (217 19)
+                                                            PRODUCT (218 20)
+                                                               MODULO (219 21)
+                                                                  POWER (220 22)
+                                                                     BITSHIFT (221 23)
+                                                                        BITWISEANDOR (222 24)
+                                                                           BITWISENOT (223 25)
+                                                                              OPERAND (224 26)
+                                                                                 token (225 27) 1 <0> <0>
+                                                                     POWERREST (226 23)
+                                                   STAT (227 17)
+                                                      COMMAND (228 18)
+                                                         IDREF (229 19)
+                                                            token (230 20) 0 <storegoal> <identifier>
+                                                            CALL (231 20)
+                                                            ACTUAL_PARAMETER_LIST (232 20)
+                                                               CONDITION (233 21)
+                                                                  COMPARISON (234 22)
+                                                                     EXPRESSION (235 23)
+                                                                        PRODUCT (236 24)
+                                                                           MODULO (237 25)
+                                                                              POWER (238 26)
+                                                                                 BITSHIFT (239 27)
+                                                                                    BITWISEANDOR (240 28)
+                                                                                       BITWISENOT (241 29)
+                                                                                          OPERAND (242 30)
+                                                                                             IDREF (243 31)
+                                                                                                token (244 32) 0 <rc_goto> <identifier>
+                                                                                                token (245 32) 0 <latitude> <identifier>
+                                                                                 POWERREST (246 27)
+                                                               CONDITION (247 21)
+                                                                  COMPARISON (248 22)
+                                                                     EXPRESSION (249 23)
+                                                                        PRODUCT (250 24)
+                                                                           MODULO (251 25)
+                                                                              POWER (252 26)
+                                                                                 BITSHIFT (253 27)
+                                                                                    BITWISEANDOR (254 28)
+                                                                                       BITWISENOT (255 29)
+                                                                                          OPERAND (256 30)
+                                                                                             IDREF (257 31)
+                                                                                                token (258 32) 0 <rc_goto> <identifier>
+                                                                                                token (259 32) 0 <longitude> <identifier>
+                                                                                 POWERREST (260 27)
+                                                               CONDITION (261 21)
+                                                                  COMPARISON (262 22)
+                                                                     EXPRESSION (263 23)
+                                                                        PRODUCT (264 24)
+                                                                           MODULO (265 25)
+                                                                              POWER (266 26)
+                                                                                 BITSHIFT (267 27)
+                                                                                    BITWISEANDOR (268 28)
+                                                                                       BITWISENOT (269 29)
+                                                                                          OPERAND (270 30)
+                                                                                             IDREF (271 31)
+                                                                                                token (272 32) 0 <pose> <identifier>
+                                                                                                token (273 32) 0 <position> <identifier>
+                                                                                                token (274 32) 0 <altitude> <identifier>
+                                                                                 POWERREST (275 27)
+                                                            token (276 20) 23 <)>
+                                                   STAT (277 17)
+                                                      RETURN (278 18)
+                                                   STAT (279 17)
+                                                token (280 16) 21 <}>
+                                          BLOCKSTAT (281 14)
+                                             BLOCK (282 15)
+                                                token (283 16) 20 <{>
+                                                STATLIST (284 16)
+                                                   STAT (285 17)
+                                                   STAT (286 17)
+                                                      VAR (287 18)
+                                                         token (288 19) 3 <var> <variable>
+                                                         token (289 19) 0 <ls> <identifier>
+                                                         EXPRESSION (290 19)
+                                                            PRODUCT (291 20)
+                                                               MODULO (292 21)
+                                                                  POWER (293 22)
+                                                                     BITSHIFT (294 23)
+                                                                        BITWISEANDOR (295 24)
+                                                                           BITWISENOT (296 25)
+                                                                              OPERAND (297 26)
+                                                                                 IDREF (298 27)
+                                                                                    token (299 28) 0 <packWP2i> <identifier>
+                                                                                    CALL (300 28)
+                                                                                    ACTUAL_PARAMETER_LIST (301 28)
+                                                                                       CONDITION (302 29)
+                                                                                          COMPARISON (303 30)
+                                                                                             EXPRESSION (304 31)
+                                                                                                PRODUCT (305 32)
+                                                                                                   MODULO (306 33)
+                                                                                                      POWER (307 34)
+                                                                                                         BITSHIFT (308 35)
+                                                                                                            BITWISEANDOR (309 36)
+                                                                                                               BITWISENOT (310 37)
+                                                                                                                  OPERAND (311 38)
+                                                                                                                     IDREF (312 39)
+                                                                                                                        token (313 40) 0 <rc_goto> <identifier>
+                                                                                                                        token (314 40) 0 <latitude> <identifier>
+                                                                                                         POWERREST (315 35)
+                                                                                       CONDITION (316 29)
+                                                                                          COMPARISON (317 30)
+                                                                                             EXPRESSION (318 31)
+                                                                                                PRODUCT (319 32)
+                                                                                                   MODULO (320 33)
+                                                                                                      POWER (321 34)
+                                                                                                         BITSHIFT (322 35)
+                                                                                                            BITWISEANDOR (323 36)
+                                                                                                               BITWISENOT (324 37)
+                                                                                                                  OPERAND (325 38)
+                                                                                                                     IDREF (326 39)
+                                                                                                                        token (327 40) 0 <rc_goto> <identifier>
+                                                                                                                        token (328 40) 0 <longitude> <identifier>
+                                                                                                         POWERREST (329 35)
+                                                                                       CONDITION (330 29)
+                                                                                          COMPARISON (331 30)
+                                                                                             EXPRESSION (332 31)
+                                                                                                PRODUCT (333 32)
+                                                                                                   MODULO (334 33)
+                                                                                                      POWER (335 34)
+                                                                                                         BITSHIFT (336 35)
+                                                                                                            BITWISEANDOR (337 36)
+                                                                                                               BITWISENOT (338 37)
+                                                                                                                  OPERAND (339 38)
+                                                                                                                     token (340 39) 1 <0> <0>
+                                                                                                         POWERREST (341 35)
+                                                                                    token (342 28) 23 <)>
+                                                                     POWERREST (343 23)
+                                                   STAT (344 17)
+                                                      IF (345 18)
+                                                         token (346 19) 5 <if> <if>
+                                                         token (347 19) 22 <(>
+                                                         CONDITION (348 19)
+                                                            COMPARISON (349 20)
+                                                               EXPRESSION (350 21)
+                                                                  PRODUCT (351 22)
+                                                                     MODULO (352 23)
+                                                                        POWER (353 24)
+                                                                           BITSHIFT (354 25)
+                                                                              BITWISEANDOR (355 26)
+                                                                                 BITWISENOT (356 27)
+                                                                                    OPERAND (357 28)
+                                                                                       IDREF (358 29)
+                                                                                          token (359 30) 0 <rc_goto> <identifier>
+                                                                                          token (360 30) 0 <id> <identifier>
+                                                                           POWERREST (361 25)
+                                                               REL_OP (362 21)
+                                                               token (363 21) 30 <>> <>>
+                                                               EXPRESSION (364 21)
+                                                                  PRODUCT (365 22)
+                                                                     MODULO (366 23)
+                                                                        POWER (367 24)
+                                                                           BITSHIFT (368 25)
+                                                                              BITWISEANDOR (369 26)
+                                                                                 BITWISENOT (370 27)
+                                                                                    OPERAND (371 28)
+                                                                                       token (372 29) 1 <49> <49>
+                                                                           POWERREST (373 25)
+                                                         token (374 19) 23 <)>
+                                                         BLOCKSTAT (375 19)
+                                                            BLOCK (376 20)
+                                                               token (377 21) 20 <{>
+                                                               STATLIST (378 21)
+                                                                  STAT (379 22)
+                                                                     COMMAND (380 23)
+                                                                        IDREF (381 24)
+                                                                           token (382 25) 0 <WPtab> <identifier>
+                                                                        EXPRESSION (383 24)
+                                                                           PRODUCT (384 25)
+                                                                              MODULO (385 26)
+                                                                                 POWER (386 27)
+                                                                                    BITSHIFT (387 28)
+                                                                                       BITWISEANDOR (388 29)
+                                                                                          BITWISENOT (389 30)
+                                                                                             OPERAND (390 31)
+                                                                                                IDREF (391 32)
+                                                                                                   token (392 33) 0 <v_wp> <identifier>
+                                                                                                   token (393 33) 0 <get> <identifier>
+                                                                                                   CALL (394 33)
+                                                                                                   ACTUAL_PARAMETER_LIST (395 33)
+                                                                                                      CONDITION (396 34)
+                                                                                                         COMPARISON (397 35)
+                                                                                                            EXPRESSION (398 36)
+                                                                                                               PRODUCT (399 37)
+                                                                                                                  MODULO (400 38)
+                                                                                                                     POWER (401 39)
+                                                                                                                        BITSHIFT (402 40)
+                                                                                                                           BITWISEANDOR (403 41)
+                                                                                                                              BITWISENOT (404 42)
+                                                                                                                                 OPERAND (405 43)
+                                                                                                                                    IDREF (406 44)
+                                                                                                                                       token (407 45) 0 <WPtab_id> <identifier>
+                                                                                                                        POWERREST (408 40)
+                                                                                                   token (409 33) 23 <)>
+                                                                                    POWERREST (410 28)
+                                                                  STAT (411 22)
+                                                                     IF (412 23)
+                                                                        token (413 24) 5 <if> <if>
+                                                                        token (414 24) 22 <(>
+                                                                        CONDITION (415 24)
+                                                                           COMPARISON (416 25)
+                                                                              EXPRESSION (417 26)
+                                                                                 PRODUCT (418 27)
+                                                                                    MODULO (419 28)
+                                                                                       POWER (420 29)
+                                                                                          BITSHIFT (421 30)
+                                                                                             BITWISEANDOR (422 31)
+                                                                                                BITWISENOT (423 32)
+                                                                                                   OPERAND (424 33)
+                                                                                                      IDREF (425 34)
+                                                                                                         token (426 35) 0 <WPtab> <identifier>
+                                                                                          POWERREST (427 30)
+                                                                              REL_OP (428 26)
+                                                                              token (429 26) 30 <!=> <!=>
+                                                                              EXPRESSION (430 26)
+                                                                                 PRODUCT (431 27)
+                                                                                    MODULO (432 28)
+                                                                                       POWER (433 29)
+                                                                                          BITSHIFT (434 30)
+                                                                                             BITWISEANDOR (435 31)
+                                                                                                BITWISENOT (436 32)
+                                                                                                   OPERAND (437 33)
+                                                                                                      token (438 34) 4 <nil> <nil>
+                                                                                          POWERREST (439 30)
+                                                                        token (440 24) 23 <)>
+                                                                        BLOCKSTAT (441 24)
+                                                                           STAT (442 25)
+                                                                              COMMAND (443 26)
+                                                                                 IDREF (444 27)
+                                                                                    token (445 28) 0 <WPtab> <identifier>
+                                                                                    EXPRESSION (446 28)
+                                                                                       PRODUCT (447 29)
+                                                                                          MODULO (448 30)
+                                                                                             POWER (449 31)
+                                                                                                BITSHIFT (450 32)
+                                                                                                   BITWISEANDOR (451 33)
+                                                                                                      BITWISENOT (452 34)
+                                                                                                         OPERAND (453 35)
+                                                                                                            IDREF (454 36)
+                                                                                                               token (455 37) 0 <rc_goto> <identifier>
+                                                                                                               token (456 37) 0 <id> <identifier>
+                                                                                                POWERREST (457 32)
+                                                                                    token (458 28) 25 <]>
+                                                                                 EXPRESSION (459 27)
+                                                                                    PRODUCT (460 28)
+                                                                                       MODULO (461 29)
+                                                                                          POWER (462 30)
+                                                                                             BITSHIFT (463 31)
+                                                                                                BITWISEANDOR (464 32)
+                                                                                                   BITWISENOT (465 33)
+                                                                                                      OPERAND (466 34)
+                                                                                                         IDREF (467 35)
+                                                                                                            token (468 36) 0 <ls> <identifier>
+                                                                                             POWERREST (469 31)
+                                                                        BLOCKSTAT (470 24)
+                                                                           BLOCK (471 25)
+                                                                              token (472 26) 20 <{>
+                                                                              STATLIST (473 26)
+                                                                                 STAT (474 27)
+                                                                                 STAT (475 27)
+                                                                                    COMMAND (476 28)
+                                                                                       IDREF (477 29)
+                                                                                          token (478 30) 0 <WPtab> <identifier>
+                                                                                       EXPRESSION (479 29)
+                                                                                          LIST (480 30)
+                                                                                             token (481 31) 21 <}>
+                                                                                 STAT (482 27)
+                                                                                    COMMAND (483 28)
+                                                                                       IDREF (484 29)
+                                                                                          token (485 30) 0 <WPtab> <identifier>
+                                                                                          EXPRESSION (486 30)
+                                                                                             PRODUCT (487 31)
+                                                                                                MODULO (488 32)
+                                                                                                   POWER (489 33)
+                                                                                                      BITSHIFT (490 34)
+                                                                                                         BITWISEANDOR (491 35)
+                                                                                                            BITWISENOT (492 36)
+                                                                                                               OPERAND (493 37)
+                                                                                                                  IDREF (494 38)
+                                                                                                                     token (495 39) 0 <rc_goto> <identifier>
+                                                                                                                     token (496 39) 0 <id> <identifier>
+                                                                                                      POWERREST (497 34)
+                                                                                          token (498 30) 25 <]>
+                                                                                       EXPRESSION (499 29)
+                                                                                          PRODUCT (500 30)
+                                                                                             MODULO (501 31)
+                                                                                                POWER (502 32)
+                                                                                                   BITSHIFT (503 33)
+                                                                                                      BITWISEANDOR (504 34)
+                                                                                                         BITWISENOT (505 35)
+                                                                                                            OPERAND (506 36)
+                                                                                                               IDREF (507 37)
+                                                                                                                  token (508 38) 0 <ls> <identifier>
+                                                                                                   POWERREST (509 33)
+                                                                                 STAT (510 27)
+                                                                              token (511 26) 21 <}>
+                                                                  STAT (512 22)
+                                                                     COMMAND (513 23)
+                                                                        IDREF (514 24)
+                                                                           token (515 25) 0 <v_wp> <identifier>
+                                                                           token (516 25) 0 <put> <identifier>
+                                                                           CALL (517 25)
+                                                                           ACTUAL_PARAMETER_LIST (518 25)
+                                                                              CONDITION (519 26)
+                                                                                 COMPARISON (520 27)
+                                                                                    EXPRESSION (521 28)
+                                                                                       PRODUCT (522 29)
+                                                                                          MODULO (523 30)
+                                                                                             POWER (524 31)
+                                                                                                BITSHIFT (525 32)
+                                                                                                   BITWISEANDOR (526 33)
+                                                                                                      BITWISENOT (527 34)
+                                                                                                         OPERAND (528 35)
+                                                                                                            IDREF (529 36)
+                                                                                                               token (530 37) 0 <WPtab_id> <identifier>
+                                                                                                POWERREST (531 32)
+                                                                              CONDITION (532 26)
+                                                                                 COMPARISON (533 27)
+                                                                                    EXPRESSION (534 28)
+                                                                                       PRODUCT (535 29)
+                                                                                          MODULO (536 30)
+                                                                                             POWER (537 31)
+                                                                                                BITSHIFT (538 32)
+                                                                                                   BITWISEANDOR (539 33)
+                                                                                                      BITWISENOT (540 34)
+                                                                                                         OPERAND (541 35)
+                                                                                                            IDREF (542 36)
+                                                                                                               token (543 37) 0 <WPtab> <identifier>
+                                                                                                POWERREST (544 32)
+                                                                           token (545 25) 23 <)>
+                                                                  STAT (546 22)
+                                                               token (547 21) 21 <}>
+                                                         BLOCKSTAT (548 19)
+                                                            STAT (549 20)
+                                                               COMMAND (550 21)
+                                                                  IDREF (551 22)
+                                                                     token (552 23) 0 <v_wp> <identifier>
+                                                                     token (553 23) 0 <put> <identifier>
+                                                                     CALL (554 23)
+                                                                     ACTUAL_PARAMETER_LIST (555 23)
+                                                                        CONDITION (556 24)
+                                                                           COMPARISON (557 25)
+                                                                              EXPRESSION (558 26)
+                                                                                 PRODUCT (559 27)
+                                                                                    MODULO (560 28)
+                                                                                       POWER (561 29)
+                                                                                          BITSHIFT (562 30)
+                                                                                             BITWISEANDOR (563 31)
+                                                                                                BITWISENOT (564 32)
+                                                                                                   OPERAND (565 33)
+                                                                                                      IDREF (566 34)
+                                                                                                         token (567 35) 0 <rc_goto> <identifier>
+                                                                                                         token (568 35) 0 <id> <identifier>
+                                                                                          POWERREST (569 30)
+                                                                        CONDITION (570 24)
+                                                                           COMPARISON (571 25)
+                                                                              EXPRESSION (572 26)
+                                                                                 PRODUCT (573 27)
+                                                                                    MODULO (574 28)
+                                                                                       POWER (575 29)
+                                                                                          BITSHIFT (576 30)
+                                                                                             BITWISEANDOR (577 31)
+                                                                                                BITWISENOT (578 32)
+                                                                                                   OPERAND (579 33)
+                                                                                                      IDREF (580 34)
+                                                                                                         token (581 35) 0 <ls> <identifier>
+                                                                                          POWERREST (582 30)
+                                                                     token (583 23) 23 <)>
+                                                   STAT (584 17)
+                                                      COMMAND (585 18)
+                                                         IDREF (586 19)
+                                                            token (587 20) 0 <reset_rc> <identifier>
+                                                            CALL (588 20)
+                                                            ACTUAL_PARAMETER_LIST (589 20)
+                                                            token (590 20) 23 <)>
+                                                   STAT (591 17)
+                                                token (592 16) 21 <}>
+                                    STAT (593 12)
+                                 token (594 11) 21 <}>
+                           BLOCKSTAT (595 9)
+                              STAT (596 10)
+                                 COMMAND (597 11)
+                                    IDREF (598 12)
+                                       token (599 13) 0 <v_wp> <identifier>
+                                       token (600 13) 0 <get> <identifier>
+                                       CALL (601 13)
+                                       ACTUAL_PARAMETER_LIST (602 13)
+                                          CONDITION (603 14)
+                                             COMPARISON (604 15)
+                                                EXPRESSION (605 16)
+                                                   PRODUCT (606 17)
+                                                      MODULO (607 18)
+                                                         POWER (608 19)
+                                                            BITSHIFT (609 20)
+                                                               BITWISEANDOR (610 21)
+                                                                  BITWISENOT (611 22)
+                                                                     OPERAND (612 23)
+                                                                        token (613 24) 1 <0> <0>
+                                                            POWERREST (614 20)
+                                       token (615 13) 23 <)>
+                     STAT (616 7)
+                  token (617 6) 21 <}>
+Successful termination

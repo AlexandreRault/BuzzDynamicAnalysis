@@ -1,0 +1,671 @@
+0a1
+> # include "include/string.bzz"
+2,29c3,29
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< TARGETDIST_VSTIG=  2;
+< ROBOTS=            10;
+< DISTANCE_MAX=      60000.;
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< TARGET_KIN=      100.;
+< EPSILON_KIN=     100.;
+< TARGET_NONKIN=   300.;
+< EPSILON_NONKIN=  250.;
+< 
+< 
+< 
+< 
+---
+> ########################################
+> #
+> # MISCELLANEOUS CONSTANTS
+> #
+> ########################################
+> 
+> TARGETDIST_VSTIG = 2
+> ROBOTS           = 10 # this must match the number of robots in the swarm
+> DISTANCE_MAX     = 60000.
+> 
+> ########################################
+> #
+> # FLOCKING-RELATED FUNCTIONS
+> #
+> ########################################
+> 
+> #
+> # Constants
+> #
+> TARGET_KIN     = 100.
+> EPSILON_KIN    = 100.
+> TARGET_NONKIN  = 300.
+> EPSILON_NONKIN = 250.
+> 
+> #
+> # Lennard-Jones interaction magnitude
+> #
+31c31
+< return   -(epsilon / dist) *(( target / dist)^4 -( target / dist)^2);
+---
+>   return -(epsilon / dist) * ((target / dist)^4 - (target / dist)^2)
+33a34
+> #
+35,36c36
+< 
+< 
+---
+> #
+38,45c38,42
+<   var lj;
+<   log("Calling function calc_lj at l: 39 and c: 7");
+<   lj=  calc_lj(data.distance, TARGET_KIN, EPSILON_KIN);
+<   log("Calling function math.cos at l: 40 and c: 16");
+<   data.x=  lj * math.cos(data.azimuth);
+<   log("Calling function math.sin at l: 41 and c: 16");
+<   data.y=  lj * math.sin(data.azimuth);
+<   return data;
+---
+>   var lj
+>   lj = calc_lj(data.distance, TARGET_KIN, EPSILON_KIN)
+>   data.x = lj * math.cos(data.azimuth)
+>   data.y = lj * math.sin(data.azimuth)
+>   return data
+48,50c45,47
+< 
+< 
+< 
+---
+> #
+> # Neighbor data to non-kin LJ interaction
+> #
+52,59c49,53
+<   var lj;
+<   log("Calling function calc_lj at l: 50 and c: 7");
+<   lj=  calc_lj(data.distance, TARGET_NONKIN, EPSILON_NONKIN);
+<   log("Calling function math.cos at l: 51 and c: 16");
+<   data.x=  lj * math.cos(data.azimuth);
+<   log("Calling function math.sin at l: 52 and c: 16");
+<   data.y=  lj * math.sin(data.azimuth);
+<   return data;
+---
+>   var lj
+>   lj = calc_lj(data.distance, TARGET_NONKIN, EPSILON_NONKIN)
+>   data.x = lj * math.cos(data.azimuth)
+>   data.y = lj * math.sin(data.azimuth)
+>   return data
+62,64c56,58
+< 
+< 
+< 
+---
+> #
+> # Accumulator of neighbor LJ interactions
+> #
+66,68c60,62
+<   accum.x=  accum.x + data.x;
+<   accum.y=  accum.y + data.y;
+<   return accum;
+---
+>   accum.x = accum.x + data.x
+>   accum.y = accum.y + data.y
+>   return accum
+71,73c65,67
+< 
+< 
+< 
+---
+> #
+> # Actual flocking logic
+> #
+75,84c69,75
+< 
+<   var accum={  };
+<   accum.x=  0;
+<   accum.y=  0;
+< log("Calling function neighbors.kin at l: 74 and c: 10");
+< 
+<   accum=  neighbors.kin().map(to_lj_kin).reduce(vec2_sum, accum);
+<   log("Calling function neighbors.nonkin at l: 75 and c: 10");
+<   accum=  neighbors.nonkin().map(to_lj_nonkin).reduce(vec2_sum, accum);
+<   log("Calling function neighbors.count at l: 76 and c: 5");
+---
+>   # Create accumulator
+>   var accum = {}
+>   accum.x = 0
+>   accum.y = 0
+>   # Calculate accumulator
+>   accum = neighbors.kin().map(to_lj_kin).reduce(vec2_sum, accum)
+>   accum = neighbors.nonkin().map(to_lj_nonkin).reduce(vec2_sum, accum)
+86,89c77,78
+<     log("Calling function neighbors.count at l: 77 and c: 24");
+<     accum.x=  accum.x / neighbors.count();
+<     log("Calling function neighbors.count at l: 78 and c: 24");
+<     accum.y=  accum.y / neighbors.count();
+---
+>     accum.x = accum.x / neighbors.count()
+>     accum.y = accum.y / neighbors.count()
+91,93c80,81
+< log("Calling function goto at l: 81 and c: 2");
+< 
+<   goto(accum.x, accum.y);
+---
+>   # Move according to vector
+>   goto(accum.x, accum.y)
+96,109c84,97
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< BARRIER_VSTIG=  1;
+< 
+< 
+< 
+< 
+---
+> ########################################
+> #
+> # BARRIER-RELATED FUNCTIONS
+> #
+> ########################################
+> 
+> #
+> # Constants
+> #
+> BARRIER_VSTIG = 1
+> 
+> #
+> # Sets a barrier
+> #
+111,112c99
+<   statef=  function() {
+< log("Calling function barrier_wait at l: 100 and c: 4");
+---
+>   statef = function() {
+114,117c101,103
+<   };
+<   log("Calling function stigmergy.create at l: 102 and c: 12");
+<   barrier=  stigmergy.create(BARRIER_VSTIG);
+<   statestr=  "barrier";
+---
+>   }
+>   barrier = stigmergy.create(BARRIER_VSTIG)
+>   statestr = "barrier"
+120,122c106,108
+< 
+< 
+< 
+---
+> #
+> # Make yourself ready
+> #
+124,125c110
+< log("Calling function barrier.put at l: 110 and c: 2");
+<   barrier.put(id, 1);
+---
+>   barrier.put(id, 1)
+128,130c113,115
+< 
+< 
+< 
+---
+> #
+> # Executes the barrier
+> #
+132,136c117,118
+< log("Calling function barrier.get at l: 117 and c: 2");
+<   barrier.get(id);
+<   log("Calling function barrier.size at l: 118 and c: 13");
+<   extradbg=  barrier.size();
+<   log("Calling function barrier.size at l: 119 and c: 5");
+---
+>   barrier.get(id)
+>   extradbg = barrier.size()
+138,140c120,121
+<     barrier=  nil;
+< log("Calling function transf at l: 121 and c: 4");
+<     transf();
+---
+>     barrier = nil
+>     transf()
+144,156c125,137
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< TARGET_NOCOLOR=  0;
+< TARGET_RED=      1;
+< TARGET_GREEN=    2;
+< TARGET_BLUE=     3;
+---
+> ########################################
+> #
+> # COLOR-RELATED FUNCTIONS
+> #
+> ########################################
+> 
+> #
+> # Constants
+> #
+> TARGET_NOCOLOR = 0
+> TARGET_RED     = 1
+> TARGET_GREEN   = 2
+> TARGET_BLUE    = 3
+159c140
+<    return(c.red == 255 and c.green == 0 and c.blue == 0);
+---
+>   return (c.red == 255 and c.green == 0 and c.blue == 0)
+163c144
+<    return(c.red == 0 and c.green == 255 and c.blue == 0);
+---
+>   return (c.red == 0 and c.green == 255 and c.blue == 0)
+167c148
+<    return(c.red == 0 and c.green == 0 and c.blue == 255);
+---
+>   return (c.red == 0 and c.green == 0 and c.blue == 255)
+171,177c152,155
+<   log("Calling function isred at l: 152 and c: 5");
+<   if(isred(c))   return TARGET_RED;
+<   log("Calling function isgreen at l: 153 and c: 5");
+<   if(isgreen(c)) return TARGET_GREEN;
+<   log("Calling function isblue at l: 154 and c: 5");
+<   if(isblue(c))  return TARGET_BLUE;
+<   return TARGET_NOCOLOR;
+---
+>   if(isred(c))   return TARGET_RED
+>   if(isgreen(c)) return TARGET_GREEN
+>   if(isblue(c))  return TARGET_BLUE
+>   return TARGET_NOCOLOR
+180,188c158,166
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+---
+> ########################################
+> #
+> # STATE-RELATED FUNCTIONS
+> #
+> ########################################
+> 
+> #
+> # Take-off state function
+> #
+190d167
+<   log("Calling function takeoff at l: 168 and c: 9");
+192,195c169,170
+< log("Calling function barrier_set at l: 169 and c: 4");
+<     barrier_set(ROBOTS, transition_to_search_for_target);
+< log("Calling function barrier_ready at l: 170 and c: 4");
+<     barrier_ready();
+---
+>     barrier_set(ROBOTS, transition_to_search_for_target)
+>     barrier_ready()
+199,201c174,176
+< 
+< 
+< 
+---
+> #
+> # Transition to search for target state function
+> #
+203,211c178,185
+<   statef=  state_search_for_target;
+<   statestr=  "search_for_target";
+<   yaw_start=  pose.orientation.yaw %( 2. * math.pi);
+< log("Calling function camera_enable at l: 181 and c: 2");
+<   camera_enable();
+<   mytargetdata={  };
+<   mytargetdata.dist=  DISTANCE_MAX;
+<   mytargetdata.color=  TARGET_NOCOLOR;
+<   mytargetdata.closest=  nil;
+---
+>   statef = state_search_for_target
+>   statestr = "search_for_target"
+>   yaw_start = pose.orientation.yaw % (2. * math.pi)
+>   camera_enable()
+>   mytargetdata = {}
+>   mytargetdata.dist = DISTANCE_MAX
+>   mytargetdata.color = TARGET_NOCOLOR
+>   mytargetdata.closest = nil
+214,216c188,190
+< 
+< 
+< 
+---
+> #
+> # Search for target state function
+> #
+218,219c192
+< log("Calling function size at l: 193 and c: 5");
+< 
+---
+>   # Can I see any object?
+221,230c194,200
+< 
+<     var cur_yaw=  pose.orientation.yaw %( 2. * math.pi);
+<     var yaw_diff=(  cur_yaw - yaw_start) %( 2. * math.pi);
+<     if(yaw_diff >=( 0.95 * 2. * math.pi)) {
+< log("Calling function barrier_set at l: 199 and c: 6");
+< 
+<       barrier_set(ROBOTS, transition_to_pick_target);
+< log("Calling function barrier_ready at l: 200 and c: 6");
+<       barrier_ready();
+<     log("Calling function rotate at l: 204 and c: 6");
+---
+>     # No object in sight
+>     var cur_yaw = pose.orientation.yaw % (2. * math.pi)
+>     var yaw_diff = (cur_yaw - yaw_start) % (2. * math.pi)
+>     if(yaw_diff >= (0.95 * 2. * math.pi)) {
+>       # Made a complete turn and no object found, give up
+>       barrier_set(ROBOTS, transition_to_pick_target)
+>       barrier_ready()
+232,234c202,204
+< 
+< 
+<  else rotate(math.pi / 180.0);
+---
+>     else
+>       # Rotate on the spot to look for target objects
+>       rotate(math.pi / 180.0)
+237,241c207,208
+< log("Calling function rotate at l: 208 and c: 4");
+< 
+<     rotate(0.0);
+<     log("Calling function rotate at l: 212 and c: 6");
+<     log("Calling function rotate at l: 210 and c: 6");
+---
+>     # Pick the first object you see and rotate to center it
+>     rotate(0.0)
+243c210
+<       rotate(-math.pi / 180.0);
+---
+>       rotate(-math.pi / 180.0)
+245c212
+<       rotate( math.pi / 180.0);
+---
+>       rotate( math.pi / 180.0)
+247,254c214,218
+< 
+<       mytargetdata.dist=  0.;
+<       log("Calling function color_to_code at l: 216 and c: 27");
+<       mytargetdata.color=  color_to_code(blobs[0].color);
+< log("Calling function barrier_set at l: 217 and c: 6");
+<       barrier_set(ROBOTS, transition_to_pick_target);
+< log("Calling function barrier_ready at l: 218 and c: 6");
+<       barrier_ready();
+---
+>       # Now pointing to the object, wait for others
+>       mytargetdata.dist = 0.
+>       mytargetdata.color = color_to_code(blobs[0].color)
+>       barrier_set(ROBOTS, transition_to_pick_target)
+>       barrier_ready()
+259,261c223,225
+< 
+< 
+< 
+---
+> #
+> # Transition to pick target state function
+> #
+263,266c227,229
+<   statef=  state_pick_target;
+<   statestr=  "pick_target";
+<   log("Calling function stigmergy.create at l: 229 and c: 15");
+<   targetdist=  stigmergy.create(TARGETDIST_VSTIG);
+---
+>   statef = state_pick_target
+>   statestr = "pick_target"
+>   targetdist = stigmergy.create(TARGETDIST_VSTIG)
+268,276c231,236
+< log("Calling function targetdist.put at l: 233 and c: 4");
+< 
+< 
+<     targetdist.put(id, mytargetdata);
+< log("Calling function barrier_set at l: 235 and c: 4");
+< 
+<     barrier_set(ROBOTS, transition_to_divide);
+< log("Calling function barrier_ready at l: 236 and c: 4");
+<     barrier_ready();
+---
+>     # I saw the target
+>     # Put an entry about my distance in the vstig
+>     targetdist.put(id, mytargetdata)
+>     # Wait to get to the next state
+>     barrier_set(ROBOTS, transition_to_divide)
+>     barrier_ready()
+280,282c240,242
+< 
+< 
+< 
+---
+> #
+> # Pick target state function
+> #
+284,292c244,251
+< 
+< 
+< 
+<   var params={  };
+<   params.dist=     mytargetdata.dist;
+<   params.color=    mytargetdata.color;
+<   params.closest=  mytargetdata.closest;
+<   log("Calling function neighbors.reduce at l: 251 and c: 11");
+<   params=  neighbors.reduce(
+---
+>   # Go through the neighbors and, for each, check its distance to the target
+>   # Keep the neighbor with the shortest distance to the target
+>   # Also, we're done when all neighbors have made a choice
+>   var params = {}
+>   params.dist    = mytargetdata.dist
+>   params.color   = mytargetdata.color
+>   params.closest = mytargetdata.closest
+>   params = neighbors.reduce(
+294,295c253
+<       log("Calling function targetdist.get at l: 253 and c: 14");
+<       var d=  targetdist.get(rid);
+---
+>       var d = targetdist.get(rid)
+298,300c256,258
+<           accum.dist=     rdata.distance + d.dist;
+<           accum.closest=  rid;
+<           accum.color=    d.color;
+---
+>           accum.dist    = rdata.distance + d.dist
+>           accum.closest = rid
+>           accum.color   = d.color
+303c261
+<       return accum;
+---
+>       return accum
+306,312c264,269
+<   );
+< 
+<   mytargetdata.closest=  params.closest;
+<   mytargetdata.color=    params.color;
+<   mytargetdata.dist=     params.dist;
+< log("Calling function targetdist.put at l: 269 and c: 2");
+<   targetdist.put(id, mytargetdata);
+---
+>   )
+>   # Advertise your choice
+>   mytargetdata.closest = params.closest
+>   mytargetdata.color   = params.color
+>   mytargetdata.dist    = params.dist
+>   targetdist.put(id, mytargetdata)
+314,318c271,273
+< log("Calling function barrier_set at l: 272 and c: 4");
+< 
+<     barrier_set(ROBOTS, transition_to_divide);
+< log("Calling function barrier_ready at l: 273 and c: 4");
+<     barrier_ready();
+---
+>     # Move to the next state
+>     barrier_set(ROBOTS, transition_to_divide)
+>     barrier_ready()
+321c276
+< 
+---
+>     # Check if we have info on the closest robot
+323,325c278,279
+< log("Calling function neighbors.get at l: 279 and c: 14");
+< 
+<       var n=  neighbors.get(mytargetdata.closest);
+---
+>       # Yes, rotate towards it
+>       var n = neighbors.get(mytargetdata.closest)
+327,329c281
+< log("Calling function rotate at l: 281 and c: 8");
+<         rotate(math.pi / 360.0);
+<       log("Calling function rotate at l: 284 and c: 8");
+---
+>         rotate(math.pi / 360.0)
+332c284
+<         rotate(-math.pi / 360.0);
+---
+>         rotate(-math.pi / 360.0)
+337,339c289,291
+< 
+< 
+< 
+---
+> #
+> # Transition to divide state function
+> #
+341,350c293,298
+<   statef=  state_divide;
+<   statestr=  "divide";
+<   log("Calling function swarm.create at l: 295 and c: 9");
+<   sred=  swarm.create(TARGET_RED);
+< log("Calling function sred.select at l: 296 and c: 2");
+<   sred.select(mytargetdata.color == TARGET_RED);
+<   log("Calling function swarm.create at l: 297 and c: 10");
+<   sblue=  swarm.create(TARGET_BLUE);
+< log("Calling function sblue.select at l: 298 and c: 2");
+<   sblue.select(mytargetdata.color == TARGET_BLUE);
+---
+>   statef = state_divide
+>   statestr = "divide"
+>   sred = swarm.create(TARGET_RED)
+>   sred.select(mytargetdata.color == TARGET_RED)
+>   sblue = swarm.create(TARGET_BLUE)
+>   sblue.select(mytargetdata.color == TARGET_BLUE)
+353,355c301,303
+< 
+< 
+< 
+---
+> #
+> # Pick target state function
+> #
+357,360c305,306
+< log("Calling function sred.exec at l: 305 and c: 2");
+<   sred.exec(flock);
+< log("Calling function sblue.exec at l: 306 and c: 2");
+<   sblue.exec(flock);
+---
+>   sred.exec(flock)
+>   sblue.exec(flock)
+363,365c309,311
+< 
+< 
+< 
+---
+> #
+> # Transition to go to target state function
+> #
+367,368c313,314
+<   statef=  state_goto_target;
+<   statestr=  "goto_target";
+---
+>   statef = state_goto_target
+>   statestr = "goto_target"
+371,373c317,319
+< 
+< 
+< 
+---
+> #
+> # Go to target state function
+> #
+377,385c323,331
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+---
+> ########################################
+> #
+> # ARGoS HOOKS
+> #
+> ########################################
+> 
+> #
+> # Executed at init time
+> #
+387,389c333,335
+< 
+<   statef=  state_takeoff;
+<   statestr=  "takeoff";
+---
+>   # Set initial state
+>   statef = state_takeoff
+>   statestr = "takeoff"
+392,394c338,340
+< 
+< 
+< 
+---
+> #
+> # Executed at each time step
+> #
+396,400c342,344
+<   extradbg=  "";
+< log("Calling function statef at l: 343 and c: 2");
+<   statef();
+< log("Calling function debug.print at l: 344 and c: 2");
+<   debug.print(statestr, ": ", extradbg);
+---
+>   extradbg = ""
+>   statef()
+>   debug.print(statestr, ": ", extradbg)
+403,405c347,349
+< 
+< 
+< 
+---
+> #
+> # Executed at the experiment end
+> #

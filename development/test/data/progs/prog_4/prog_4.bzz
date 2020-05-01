@@ -1,0 +1,9 @@
+function lennardjones() {
+    
+    res = neighbors.map(lj_vector).reduce(lj_sum,
+                      math.vec2.new(0.0, 0.0));
+
+    res2 = neighbors.mapArr[map2(lj_vector)].reduceArr[reduce2(lj_sum,
+                                   math.vec2.new(0.0, 0.0))];
+
+}

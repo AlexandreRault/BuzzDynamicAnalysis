@@ -1,0 +1,234 @@
+#
+# add return expr + nested expr with calls
+#
+
+# Barrier functions
+
+ROBOTS = 8;
+BARRIER_VSTIG = 101;
+GLOB_X = GLOB_Y;
+
+function exprStm() {
+
+    timeW = 1;
+    BVMSTATE = "BARRIERWAIT";
+    barrier = stigmergy.create(BARRIER_VSTIG);
+
+    statef = function() {
+    barrier_wait(threshold, transf, resumef, bc);
+    barrier_create();
+    }
+
+    var return_table={.State=0.0,
+              .Label=0.0,
+              .ReqLabel=0.0,
+              .ReqID=0.0,
+              .Response=0.0};
+
+    m_navigation={.x=0,.y=0};
+
+    m_MessageReqLabel={};
+    m_selfMessage={.State=s2i_graph("GRAPH_FREE"),
+           .Label=0,
+           .ReqLabel=0,
+           .ReqID=0,
+           .Response=r2i("REQ_NONE")};
+
+    send_value = (1000000 * send_table.State.st1.st2 + 100000 * send_table.Label.label2 + 10000 * send_table.ReqLabel + 100 * send_table.ReqID + send_table.Response.resp2);
+
+    m_MessageState[i] = "GRAPH_JOINED";
+
+    pathL[npt][2] = Q[nb][2] + B[x];
+    pathL[npt][2] = A.B + B.C.D.E;
+    pathL[npt][2] = - Field[n][4]
+
+    struct1.field2.field3 = struct2.field4.field5;
+
+    x = f(a) + f(b) + f(c);
+
+    #
+    # check and add if a lambda func can be declared and applied
+    # immediately as an array index (lhs / rhs)
+    #
+
+    y[f(a)] = 0;
+
+}
+
+
+function cond() {
+
+    a = true;
+    aFlag = (timeW % 10 == 0 and bc > 0);
+    bFlag = (lock_neighbor_id[i] == nei_id);
+    cFlag = (i < m_neighbourCount and psResponse == -1);
+    dFlag = (math.vec2.length(cur_goal) > GOTO_MAXDIST*5);
+}
+
+function ifStm() {
+
+    if (a and b)
+    return x;
+    else
+    return y;
+
+    if (i < j)
+    a = a + 1;
+    else
+    b = b + 1;
+
+    if(timeW >= BARRIER_TIMEOUT) {
+    log("------> Barrier Timeout !!!!");
+    #barrier = nil;
+    timeW = 0;
+    GRAPHSTATE = resumef;
+    } else
+    if (timeW % 10 == 0 and bc > 0)
+        neighbors.broadcast("cmd", bc);
+
+    if(key == "d") {
+    if(value == 1)
+        return 1;
+    } else
+    if (key!="n" and value != bc)
+        barriergood = 0;
+
+    if (lock_neighbor_id[i] == nei_id) {
+    return_val=lock_neighbor_dis[i];
+    }
+    i=i+1
+
+    if(size(mapRequests) != 0) {
+        i=1
+    }
+
+    if (math.vec2.length(cur_goal) > fabs(GOTO_MAXDIST * 5)) {
+    i=1
+    }
+
+    if (map[xi][yi] < 0.5) {
+    # because obstacle use trust values
+    #log("Obstacle in the way(", xi, " ", yi, ": ", map[xi][yi], ")!")
+    return 1;
+    }
+
+    if (nb == Q[Q[nb][3]][3]) {
+    log("ERROR - Recursive path !!!")
+    return nil
+    }
+}
+
+function whileStm() {
+
+    i=0
+        while (i<size(table)) {
+        if(table[i] == value)
+        ind = i;
+        i = i + 1;
+    }
+
+    while (i < m_neighbourCount and psResponse == -1 or j > 3) {
+    if (m_MessageState[i] == "GRAPH_JOINED") {
+        #log("received label = ",m_MessageReqLabel[i])
+        if (m_MessageReqLabel[i] == m_nLabel)
+        if (m_MessageResponse[i] != "REQ_NONE") {
+            psResponse = i;
+        }
+    }
+    i=i+1;
+    }
+
+    while (m_MessageResponse[i] != b(x, y, z)) {
+    }
+
+
+}
+
+function foreachStm() {
+
+    neighbors.foreach(
+              function(rid, data) {
+              if (rid == t_id) {
+                  m_receivedMessage.Range = data.distance*100.0;
+                  m_receivedMessage.Bearing = data.azimuth;
+              }
+              });
+
+    barrier[f(b) + s.t.w[x]].w.foreach(
+                       function(key, value, robot) {
+                       barrier.get(key);
+                       #log("VS entry : ", key, " ", value, " ", robot);
+                       });
+}
+
+
+function callStm(x) {
+
+    UpdateGraph();
+    m_selfMessage.State=s2i_graph(GRAPHSTATE);
+    fName = function(arg) {
+    arg = arg - 3;
+    };
+    fName(k);
+    fNameArr[i][j][k](y);
+    fNameStruct.a.b.c(z);
+    fNameStruct[m][n].a[r].b[s].c[t](z);
+    fExpr(x + y * z - g(n));
+}
+
+function returnStm() {
+
+    if (x > 1) {
+    return stigmergy.create(BARRIER_VSTIG);
+    }
+    if (y > 1) {
+    return function() {
+        barrier_wait(threshold, transf, resumef, bc);
+        barrier_create();
+    }
+    }
+    if (z > 1) {
+    return Q[nb][2] + B[x];
+    }
+    if (w > 1) {
+    return A.B + B.C.D.E;
+    }
+    if (v > 1) {
+    return struct2.field4.field5;
+    }
+    if (s > 1) {
+    return f(a) + f(b) + f(c);
+    }
+    return barriergood;
+}
+
+function lib() {
+
+    log("--->BS: ",
+    barrier.size(),
+    " / ",
+    threshold,
+    " (",
+    BARRIER_VSTIG,
+    " - ",
+    barrier.get("d"),
+    ") t= ",
+    timeW);
+}
+
+# Check all members state;
+function barrier_allgood(barrier, bc) {
+    barriergood = 1;
+    barrier.foreach(function(key, value, robot){
+        barrier.get(key);
+        #log("VS entry : ", key, " ", value, " ", robot);
+        if(key == "d"){
+        if(value == 1)
+            return 1;
+        } else
+        if(key!="n" and value != bc)
+            barriergood = 0;
+    });
+
+    return barriergood;
+}

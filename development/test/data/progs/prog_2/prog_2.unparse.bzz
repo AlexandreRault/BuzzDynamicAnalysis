@@ -1,0 +1,29 @@
+function check_rc_wp() {
+    if (firsttimeinwp) {
+        v_wp = stigmergy.create(WP_STIG);
+        storegoal(pose.position.latitude, pose.position.longitude, pose.position.altitude);
+        firsttimeinwp = 0;
+    } 
+    if (rc_goto.id != -1) {
+        if (rc_goto.id == id) {
+            wpreached = 0;
+            storegoal(rc_goto.latitude, rc_goto.longitude, pose.position.altitude);
+            return;
+        } else {
+            var ls = packWP2i(rc_goto.latitude, rc_goto.longitude, 0);
+            if (rc_goto.id > 49) {
+                WPtab = v_wp.get(WPtab_id);
+                if (WPtab != nil) 
+                    WPtab[rc_goto.id] = ls;
+                else {
+                    WPtab = {};
+                    WPtab[rc_goto.id] = ls;
+                } 
+                v_wp.put(WPtab_id, WPtab);
+            } else 
+                v_wp.put(rc_goto.id, ls);
+            reset_rc();
+        } 
+    } else 
+        v_wp.get(0);
+} 

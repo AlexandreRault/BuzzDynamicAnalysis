@@ -1,0 +1,14 @@
+#
+# add return expr + nested expr with calls
+#
+
+# Barrier functions
+    
+ALEX = 8;
+BARRIER_VSTIG = 101;
+GLOB_X = GLOB_Y;
+
+# Check all members state;
+function something(param1, param2) {
+    l(t())
+}

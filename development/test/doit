@@ -1,0 +1,976 @@
+#!/bin/tcsh
+
+#
+# Copyright (C) 2017 - 2019 Ettore Merlo - All rights reserved
+# Copyright (C) 2020 Alexandre Rault - All rights reserved
+#
+
+source ./bzzConfig.tcsh
+source ../javaConfig.tcsh
+setenv CLASSPATH "$CLASSPATH":..
+
+set srcdir = ".."
+#cp "$srcdir"/*.C .
+
+set ALALL = FALSE
+#set ALALL = TRUE
+
+#set VIS_CFG = FALSE
+set VIS_CFG = TRUE
+
+set dbDir = '../../db/db1'
+set visualDir = '../tool'
+
+set cases = ''
+if ("$argv" != '') then
+    if ("$argv" == 'prog_0') then
+        set cases = '101 201 301 401 501'
+    else if ("$argv" == 'prog_1') then
+        set cases = '102 202 302 402 502'
+    else if ("$argv" == 'prog_2') then
+        set cases = '103 203 303 403 503'
+    else if ("$argv" == 'prog_3') then
+        set cases = '104 204 304 404 504'
+    else if ("$argv" == 'prog_4') then
+        set cases = '105 205 305 405 505'
+    else if ("$argv" == 'prog_5') then
+        set cases = '106 206 306 406 506'
+    else if ("$argv" == 'prog_18') then
+        set cases = '107 207 307 407 507'
+    else if ("$argv" == 'prog_takeoff_divide') then
+        set cases = '108 208 308 408 508'
+    else if ("$argv" == 'progs') then
+        set cases = '101 201 301 401 501 102 202 302 402 502 103 203 303 403 503 104 204 304 404 504 105 205 305 405 505 106 206 306 406 506 107 207 307 407 507'
+    else
+        set cases = "$argv"
+    endif
+else
+    #set cases = '1 2 3'
+    #set cases = '0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17'
+    set cases = ''
+endif
+
+foreach testCase ( `echo "$cases"` )
+
+switch ( $testCase )
+
+case '0':
+echo "TEST 0 - parse sources"
+
+cp data/prog_0.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+set retVal = "$?"
+if ("$retVal" != '0') then
+    echo "ERRORS during parsing prog_0.bzz"
+    exit 1
+endif
+
+sed 's/^literal /tk_literal /' ast.txt > delme_ast.txt
+cp delme_ast.txt ast.txt
+
+if ("$ALALL" == "TRUE") then
+    echo "ALIGNMENT REQUIRED"
+    cp res.rep data/res_0.rep
+    cp ast.txt data/prog_0.parse.txt
+endif
+
+diff res.rep data/res_0.rep
+diff ast.txt data/prog_0.parse.txt
+
+breaksw
+	
+case '1':
+echo "TEST 1: ast"
+
+#
+# different AST types (inactive test)
+#
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/ast_1.tab > ast.tab
+
+java buzzParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_1.rep
+endif
+
+diff res.rep data/res_1.rep
+
+breaksw
+
+
+case '2':
+echo "TEST 2: buzz ast aggregate"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/aggregate_AST_2.tab > ast.tab
+
+java buzzParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_2.rep
+endif
+
+diff res.rep data/res_2.rep
+
+breaksw
+
+
+case '3':
+echo "TEST 3: buzz ast while"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/example_while_AST_3.tab > ast.tab
+
+java buzzParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_3.rep
+endif
+
+diff res.rep data/res_3.rep
+
+breaksw
+
+
+case '4':
+echo "TEST 4: buzz ast if"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/example_if_AST_4.tab > ast.tab
+
+java buzzParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_4.rep
+endif
+
+diff res.rep data/res_4.rep
+
+breaksw
+
+
+case '5':
+echo "TEST 5: buzz ast appel"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/appel_function_AST_5.tab > ast.tab
+
+java buzzParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_5.rep
+endif
+
+diff res.rep data/res_5.rep
+
+breaksw
+
+
+case '6':
+echo "TEST 6: buzz ast barrier"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/barrier_AST_6.tab > ast.tab
+echo -n '' > cfg.tab
+
+java buzzParseMain ast.tab >&! res.rep
+
+egrep '(^cfg_succ |^node_type |^entry |^exit |^entry_func_name |^exit_func_name |^call_end |^call_begin |^call_func |^return_func |^ast_id)' res.rep > cfg.tab
+
+#
+# cfg visualization
+#
+
+echo "digraph G {" > cfg.dot
+grep '^cfg_succ ' cfg.tab | sed 's/^cfg_succ //' | sed 's/ / -> /' >> cfg.dot
+grep '^call_end ' cfg.tab | sed 's/^call_end //' | sed 's/ / -> /' >> cfg.dot
+echo "}" >> cfg.dot
+
+dot -Teps -o cfg.eps cfg.dot
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_6.rep
+	cp cfg.tab data/cfg_6.tab
+endif
+
+diff res.rep data/res_6.rep
+diff cfg.tab data/cfg_6.tab
+
+breaksw
+
+
+case '7':
+echo "TEST 7: buzz pretty print ast barrier"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/barrier_AST_6.tab > ast.tab
+
+java buzzPrettyParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_7.rep
+endif
+
+diff res.rep data/res_7.rep
+
+breaksw
+
+
+case '8':
+echo "TEST 8: buzz compact pretty print ast barrier"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/barrier_AST_6.tab > ast.tab
+
+java buzzCompactPrettyParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_8.rep
+endif
+
+diff res.rep data/res_8.rep
+
+breaksw
+
+
+case '9':
+echo "TEST 9: buzz compact xtr ast barrier"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/barrier_AST_6.tab > parse.tab
+
+java buzzAstCompactXtrMain parse.tab ast.tab >&! res1.rep
+
+egrep -v '(^node_type |^attr ast_root |^ast_edge )' parse.tab > delmeAst.tab
+cat ast.tab >> delmeAst.tab
+java buzzAstCompactPrettyPrintMain delmeAst.tab >&! res2.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res1.rep data/res1_9.rep
+        cp res2.rep data/res2_9.rep
+	cp ast.tab data/ast_9.tab
+endif
+
+diff res1.rep data/res1_9.rep
+diff res2.rep data/res2_9.rep
+diff ast.tab data/ast_9.tab
+
+breaksw
+
+
+case '10':
+echo "TEST 10: buzz compact pretty print ast prog_0"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/prog_0.parse.txt > ast.tab
+
+java buzzCompactPrettyParseMain ast.tab >&! res.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_10.rep
+endif
+
+diff res.rep data/res_10.rep
+
+breaksw
+
+
+case '11':
+echo "TEST 11: buzz compact xtr ast prog_0"
+
+cp data/options_1.dat options.dat
+fgrep -v '#' data/prog_0.parse.txt > parse.tab
+
+java buzzAstCompactXtrMain parse.tab ast.tab >&! res1.rep
+
+#egrep -v '(^node_type |^attr ast_root |^ast_edge )' parse.tab > delmeAst.tab
+#cat ast.tab >> delmeAst.tab
+
+cat ast.tab > delmeAst.tab
+
+java buzzAstCompactPrettyPrintMain delmeAst.tab >&! res2.rep
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res1.rep data/res1_11.rep
+        cp res2.rep data/res2_11.rep
+	cp ast.tab data/ast_11.tab
+endif
+
+diff res1.rep data/res1_11.rep
+diff res2.rep data/res2_11.rep
+diff ast.tab data/ast_11.tab
+
+breaksw
+
+
+case '12':
+echo "TEST 12: buzz cfg xtr ast prog_0"
+
+fgrep -v '#' data/options_12.dat > options.dat
+cp data/ast_11.tab ast.tab
+echo -n '' > cfg.tab
+
+java buzzCfgXtrMain ast.tab cfg.tab >&! res.rep
+
+grep '^TAB: cfg_succ ' res.rep | sed 's/^TAB: //' > cfg.tab
+grep '^TAB: node_type ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: ast_id ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: call_begin ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: call_end ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: call_func ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: return_func ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: entry_func_name ' res.rep | sed 's/^TAB: //' >> cfg.tab
+grep '^TAB: exit_func_name ' res.rep | sed 's/^TAB: //' >> cfg.tab
+
+if ("$VIS_CFG" == "TRUE") then
+
+    #
+    # cfg visualization
+    #
+
+    python "$visualDir"/visualizeCfg.py cfg.tab cfg.dot >&! dot.rep
+    dot -Teps -o cfg.eps cfg.dot
+    cp cfg.eps cfg_12.eps
+endif
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_12.rep
+	cp cfg.tab data/cfg_12.tab
+endif
+
+diff res.rep data/res_12.rep
+diff cfg.tab data/cfg_12.tab
+
+breaksw
+
+
+case '13':
+echo "TEST 13: buzz cmd cfg xtr ast prog_0"
+
+fgrep -v '#' data/options_13.dat > options.dat
+cp data/ast_11.tab ast.tab
+echo -n '' > cfg.tab
+
+java buzzCmdCfgXtrMain ast.tab cfg.tab >&! res.rep
+
+grep '^TAB: ' res.rep | sed 's/^TAB: //' > cfg.tab
+
+if ("$VIS_CFG" == "TRUE") then
+
+    #
+    # cfg visualization
+    #
+
+    python "$visualDir"/visualizeCfg.py cfg.tab cfg.dot >&! dot.rep
+    set retVal = "$?"
+    if ("$retVal" != '0') then
+        echo "ERRORS during cfg visualization"
+        exit 1
+    endif
+    dot -Teps -o cfg.eps cfg.dot
+    set retVal = "$?"
+    if ("$retVal" != '0') then
+        echo "ERRORS during cfg dot rendering"
+        exit 1
+    endif
+    cp cfg.eps cfg_13.eps
+endif
+
+if ("$ALALL" == "TRUE") then
+        echo "ALIGNMENT REQUIRED"
+        cp res.rep data/res_13.rep
+	cp cfg.tab data/cfg_13.tab
+endif
+
+diff res.rep data/res_13.rep
+diff cfg.tab data/cfg_13.tab
+
+breaksw
+
+
+case '14':
+echo "TEST 14: buzz cmd cfg xtr ast prog_1"
+
+fgrep -v '#' data/options_13.dat > options.dat
+
+./parseProg.sh prog_1 ./data "$VIS_CFG"
+set retVal = "$?"
+if ("$retVal" != '0') then
+    echo "ERRORS during parsing prog_1"
+    exit 1
+endif
+
+breaksw
+
+
+case '15':
+echo "TEST 15: buzz cmd cfg xtr ast prog_2"
+
+fgrep -v '#' data/options_13.dat > options.dat
+
+./parseProg.sh prog_2 ./data "$VIS_CFG"
+set retVal = "$?"
+if ("$retVal" != '0') then
+    echo "ERRORS during parsing prog_2"
+    exit 1
+endif
+
+breaksw
+
+
+case '16':
+echo "TEST 16: buzz cmd cfg xtr ast prog_3"
+
+fgrep -v '#' data/options_13.dat > options.dat
+
+./parseProg.sh prog_3 ./data "$VIS_CFG"
+set retVal = "$?"
+if ("$retVal" != '0') then
+    echo "ERRORS during parsing prog_3"
+    exit 1
+endif
+
+breaksw
+
+
+case '17':
+echo "TEST 17: buzz cmd cfg xtr ast prog_4"
+
+fgrep -v '#' data/options_13.dat > options.dat
+
+./parseProg.sh prog_4 ./data "$VIS_CFG"
+set retVal = "$?"
+if ("$retVal" != '0') then
+    echo "ERRORS during parsing prog_4"
+    exit 1
+endif
+
+breaksw
+
+#
+# PARSE SOURCE (GENERATE PARSE TREE)
+#
+
+case '101':
+echo "TEST 101: parse sources prog_0"
+
+cp data/progs/prog_0/prog_0.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_0/prog_0.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '102':
+echo "TEST 102: parse sources prog_1"
+
+cp data/progs/prog_1/prog_1.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_1/prog_1.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '103':
+echo "TEST 103: parse sources prog_2"
+
+cp data/progs/prog_2/prog_2.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_2/prog_2.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '104':
+echo "TEST 104: parse sources prog_3"
+
+cp data/progs/prog_3/prog_3.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_3/prog_3.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '105':
+echo "TEST 105: parse sources prog_4"
+
+cp data/progs/prog_4/prog_4.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_4/prog_4.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '106':
+echo "TEST 106: parse sources prog_5"
+
+cp data/progs/prog_5/prog_5.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_5/prog_5.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '107':
+echo "TEST 107: parse sources prog_18"
+
+cp data/progs/prog_18/prog_18.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_18/prog_18.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+case '108':
+echo "TEST 108: parse sources prog_takeoff_divide"
+
+cp data/progs/prog_takeoff_divide/test_takeoff_divide_flock.bzz ./prog.bzz
+bzzparse prog.bzz prog.asm >&! res.rep
+
+sed 's/^literal /tk_literal /' ast.txt > ast.tab
+cp ast.tab data/progs/prog_takeoff_divide/prog_takeoff_divide.parse.tab
+
+rm ast.txt
+rm prog.asm
+rm prog.bzz
+rm res.rep
+
+breaksw
+
+#
+# PARSE TREE PRETTY PRINT
+#
+
+case '201':
+echo "TEST 201: buzz parse pretty print prog_0"
+
+fgrep -v '#' data/progs/prog_0/prog_0.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_0/prog_0.pp.parse.tab
+
+breaksw
+
+case '202':
+echo "TEST 202: buzz parse pretty print prog_1"
+
+fgrep -v '#' data/progs/prog_1/prog_1.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_1/prog_1.pp.parse.tab
+
+breaksw
+
+case '203':
+echo "TEST 203: buzz parse pretty print prog_2"
+
+fgrep -v '#' data/progs/prog_2/prog_2.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_2/prog_2.pp.parse.tab
+
+breaksw
+
+case '204':
+echo "TEST 204: buzz parse pretty print prog_3"
+
+fgrep -v '#' data/progs/prog_3/prog_3.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_3/prog_3.pp.parse.tab
+
+breaksw
+
+case '205':
+echo "TEST 205: buzz parse pretty print prog_4"
+
+fgrep -v '#' data/progs/prog_4/prog_4.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_4/prog_4.pp.parse.tab
+
+breaksw
+
+case '206':
+echo "TEST 206: buzz parse pretty print prog_5"
+
+fgrep -v '#' data/progs/prog_5/prog_5.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_5/prog_5.pp.parse.tab
+
+breaksw
+
+
+case '207':
+echo "TEST 207: buzz parse pretty print prog_18"
+
+fgrep -v '#' data/progs/prog_18/prog_18.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_18/prog_18.pp.parse.tab
+
+breaksw
+
+case '208':
+echo "TEST 208: buzz parse pretty print prog_takeoff_divide"
+
+fgrep -v '#' data/progs/prog_takeoff_divide/prog_takeoff_divide.parse.tab > ast.tab
+
+java buzzParseTreePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_takeoff_divide/prog_takeoff_divide.pp.parse.tab
+
+breaksw
+
+# 
+# UNPARSE PRETTY PRINT
+#
+
+case '301':
+echo "TEST 301: buzz unparse pretty print prog_0"
+
+fgrep -v '#' data/progs/prog_0/prog_0.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_0/prog_0.unparse.bzz
+
+breaksw
+
+case '302':
+echo "TEST 302: buzz unparse pretty print prog_1"
+
+fgrep -v '#' data/progs/prog_1/prog_1.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_1/prog_1.unparse.bzz
+
+breaksw
+
+case '303':
+echo "TEST 303: buzz unparse pretty print prog_2"
+
+fgrep -v '#' data/progs/prog_2/prog_2.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_2/prog_2.unparse.bzz
+
+breaksw
+
+case '304':
+echo "TEST 304: buzz unparse pretty print prog_3"
+
+fgrep -v '#' data/progs/prog_3/prog_3.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_3/prog_3.unparse.bzz
+
+breaksw
+
+case '305':
+echo "TEST 305: buzz unparse pretty print prog_4"
+
+fgrep -v '#' data/progs/prog_4/prog_4.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_4/prog_4.unparse.bzz
+
+breaksw
+
+case '306':
+echo "TEST 306: buzz unparse pretty print prog_5"
+
+fgrep -v '#' data/progs/prog_5/prog_5.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_5/prog_5.unparse.bzz
+
+breaksw
+
+case '307':
+echo "TEST 307: buzz unparse pretty print prog_18"
+
+fgrep -v '#' data/progs/prog_18/prog_18.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_18/prog_18.unparse.bzz
+
+breaksw
+
+case '308':
+echo "TEST 308: buzz unparse pretty print prog_takeoff_divide"
+
+fgrep -v '#' data/progs/prog_takeoff_divide/prog_takeoff_divide.parse.tab > ast.tab
+
+java buzzUnparsePrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_takeoff_divide/test_takeoff_divide_flock.unparse.bzz
+
+breaksw
+
+#
+# PARSE TREE INJECTION
+#
+
+case '401':
+echo "TEST 401: buzz parse tree injection prog_0"
+
+fgrep -v '#' data/progs/prog_0/prog_0.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_0/prog_0.ast_injected.txt
+
+breaksw
+
+case '402':
+echo "TEST 402: buzz parse tree injection prog_1"
+
+fgrep -v '#' data/progs/prog_1/prog_1.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_1/prog_1.ast_injected.txt
+
+breaksw
+
+case '403':
+echo "TEST 403: buzz parse tree injection prog_2"
+
+fgrep -v '#' data/progs/prog_2/prog_2.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_2/prog_2.ast_injected.txt
+
+breaksw
+
+case '404':
+echo "TEST 404: buzz parse tree injection prog_3"
+
+fgrep -v '#' data/progs/prog_3/prog_3.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_3/prog_3.ast_injected.txt
+
+breaksw
+
+case '405':
+echo "TEST 405: buzz parse tree injection prog_4"
+
+fgrep -v '#' data/progs/prog_4/prog_4.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_4/prog_4.ast_injected.txt
+
+breaksw
+
+case '406':
+echo "TEST 406: buzz parse tree injection prog_5"
+
+fgrep -v '#' data/progs/prog_5/prog_5.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_5/prog_5.ast_injected.txt
+
+breaksw
+
+case '407':
+echo "TEST 407: buzz parse tree injection prog_18"
+
+fgrep -v '#' data/progs/prog_18/prog_18.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_18/prog_18.ast_injected.txt
+
+breaksw
+
+case '408':
+echo "TEST 408: buzz parse tree injection prog_takeoff_divide"
+
+fgrep -v '#' data/progs/prog_takeoff_divide/prog_takeoff_divide.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_takeoff_divide/prog_takeoff_divide.ast_injected.txt
+
+breaksw
+
+#
+# PRETTY PRINT CODE INJECTION
+#
+
+case '501':
+echo "TEST 501: buzz unparse with injection prog_0"
+
+fgrep -v '#' data/progs/prog_0/prog_0.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_0/prog_0.code_injected.bzz
+
+breaksw
+
+case '502':
+echo "TEST 502: buzz unparse with injection prog_1"
+
+fgrep -v '#' data/progs/prog_1/prog_1.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_1/prog_1.code_injected.bzz
+
+breaksw
+
+case '503':
+echo "TEST 503: buzz unparse with injection prog_2"
+
+fgrep -v '#' data/progs/prog_2/prog_2.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_2/prog_2.code_injected.bzz
+
+breaksw
+
+case '504':
+echo "TEST 504: buzz unparse with injection prog_3"
+
+fgrep -v '#' data/progs/prog_3/prog_3.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_3/prog_3.code_injected.bzz
+
+breaksw
+
+case '505':
+echo "TEST 505: buzz unparse with injection prog_4"
+
+fgrep -v '#' data/progs/prog_4/prog_4.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_4/prog_4.code_injected.bzz
+
+breaksw
+
+case '506':
+echo "TEST 506: buzz unparse with injection prog_5"
+
+fgrep -v '#' data/progs/prog_5/prog_5.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_5/prog_5.code_injected.bzz
+
+breaksw
+
+case '507':
+echo "TEST 507: buzz unparse with injection prog_18"
+
+fgrep -v '#' data/progs/prog_18/prog_18.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_18/prog_18.code_injected.bzz
+
+breaksw
+
+case '508':
+echo "TEST 508: buzz unparse with injection prog_takeoff_divide"
+
+fgrep -v '#' data/progs/prog_takeoff_divide/prog_takeoff_divide.parse.tab > ast.tab
+
+java buzzParseTreeTraceInjectionPrettyPrintMain ast.tab >&! res.rep
+
+cp res.rep data/progs/prog_takeoff_divide/prog_takeoff_divide.code_injected.bzz
+
+breaksw
+
+
+default:
+    echo 'ERROR: invalid test case label'
+breaksw
+
+endsw
+
+end
+
+echo END TESTS
+
+exit 0

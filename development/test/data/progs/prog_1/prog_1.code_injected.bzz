@@ -1,0 +1,24 @@
+function point_max_from_line(minp, maxp, points) {
+    log("probe begin function point_max_from_line (2, 9)");
+    max_dist = 0;
+    max_point = {};
+    log("probe call function foreach (15, 5)");
+    foreach(points, function(key, point) {
+        log("probe call function math.vec2.equal (7, 87)");
+        var temp_inject_var_1 = math.vec2.equal(point, maxp);
+        log("probe call function math.vec2.equal (7, 44)");
+        var temp_inject_var_2 = math.vec2.equal(point, minp);
+        if ((not (temp_inject_var_2)) and (not (temp_inject_var_1))) {
+            log("probe call function distance_toline (9, 52)");
+            var temp_inject_var_0 = distance_toline(minp, maxp, point);
+            dist = temp_inject_var_0;
+            if (dist > max_dist) {
+                max_dist = dist;
+                max_point = point;
+            } 
+        } 
+    } );
+    log("probe return end function point_max_from_line");
+    return max_point;
+    log("probe end function point_max_from_line");
+} 

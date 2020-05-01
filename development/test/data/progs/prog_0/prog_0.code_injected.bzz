@@ -1,0 +1,254 @@
+ROBOTS = 8;
+BARRIER_VSTIG = 101;
+GLOB_X = GLOB_Y;
+function exprStm() {
+    log("probe begin function exprStm (11, 9)");
+    timeW = 1;
+    BVMSTATE = "BARRIERWAIT";
+    log("probe call function stigmergy.create (15, 44)");
+    var temp_inject_var_25 = stigmergy.create(BARRIER_VSTIG);
+    barrier = temp_inject_var_25;
+    statef = function() {
+        log("probe call function barrier_wait (18, 47)");
+        barrier_wait(threshold, transf, resumef, bc);
+        log("probe call function barrier_create (19, 19)");
+        barrier_create();
+    } ;
+    var return_table = {.State=0.0, .Label=0.0, .ReqLabel=0.0, .ReqID=0.0, .Response=0.0};
+    m_navigation = {.x=0, .y=0};
+    m_MessageReqLabel = {};
+    log("probe call function r2i (35, 35)");
+    var temp_inject_var_23 = r2i("REQ_NONE");
+    log("probe call function s2i_graph (31, 48)");
+    var temp_inject_var_24 = s2i_graph("GRAPH_FREE");
+    m_selfMessage = {.State=temp_inject_var_24, .Label=0, .ReqLabel=0, .ReqID=0, .Response=temp_inject_var_23};
+    send_value = (1000000 * send_table.State.st1.st2 + 100000 * send_table.Label.label2 + 10000 * send_table.ReqLabel + 100 * send_table.ReqID + send_table.Response.resp2);
+    m_MessageState[i] = "GRAPH_JOINED";
+    pathL[npt][2] = Q[nb][2] + B[x];
+    pathL[npt][2] = A.B + B.C.D.E;
+    pathL[npt][2] = -Field[n][4];
+    struct1.field2.field3 = struct2.field4.field5;
+    log("probe call function f (47, 25)");
+    var temp_inject_var_20 = f(c);
+    log("probe call function f (47, 18)");
+    var temp_inject_var_21 = f(b);
+    log("probe call function f (47, 11)");
+    var temp_inject_var_22 = f(a);
+    x = temp_inject_var_22 + temp_inject_var_21 + temp_inject_var_20;
+    log("probe call function f (54, 9)");
+    var temp_inject_var_19 = f(a);
+    y[temp_inject_var_19] = 0;
+    log("probe end function exprStm");
+} 
+function cond() {
+    log("probe begin function cond (59, 9)");
+    a = true;
+    aFlag = (timeW % 10 == 0 and bc > 0);
+    bFlag = (lock_neighbor_id[i] == nei_id);
+    cFlag = (i < m_neighbourCount and psResponse == -1);
+    log("probe call function math.vec2.length (65, 38)");
+    var temp_inject_var_18 = math.vec2.length(cur_goal);
+    dFlag = (temp_inject_var_18 > GOTO_MAXDIST * 5);
+    log("probe end function cond");
+} 
+function ifStm() {
+    log("probe begin function ifStm (68, 9)");
+    if (a and b) {
+        log("probe return end function ifStm");
+        return x;
+    } else {
+        log("probe return end function ifStm");
+        return y;
+    } 
+    if (i < j) 
+        a = a + 1;
+    else 
+        b = b + 1;
+    if (timeW >= BARRIER_TIMEOUT) {
+        log("probe call function log (81, 38)");
+        log("------> Barrier Timeout !!!!");
+        timeW = 0;
+        GRAPHSTATE = resumef;
+    } else 
+        if (timeW % 10 == 0 and bc > 0) {
+            log("probe call function neighbors.broadcast (87, 37)");
+            neighbors.broadcast("cmd", bc);
+        } 
+    if (key == "d") {
+        if (value == 1) {
+            log("probe return end function ifStm");
+            return 1;
+        } 
+    } else 
+        if (key != "n" and value != bc) 
+            barriergood = 0;
+    if (lock_neighbor_id[i] == nei_id) {
+        return_val = lock_neighbor_dis[i];
+    } 
+    i = i + 1;
+    log("probe call function size (101, 23)");
+    var temp_inject_var_17 = size(mapRequests);
+    if (temp_inject_var_17 != 0) {
+        i = 1;
+    } 
+    log("probe call function fabs (105, 58)");
+    var temp_inject_var_15 = fabs(GOTO_MAXDIST * 5);
+    log("probe call function math.vec2.length (105, 33)");
+    var temp_inject_var_16 = math.vec2.length(cur_goal);
+    if (temp_inject_var_16 > temp_inject_var_15) {
+        i = 1;
+    } 
+    if (map[xi][yi] < 0.5) {
+        log("probe return end function ifStm");
+        return 1;
+    } 
+    if (nb == Q[Q[nb][3]][3]) {
+        log("probe call function log (116, 36)");
+        log("ERROR - Recursive path !!!");
+        log("probe return end function ifStm");
+        return nil;
+    } 
+    log("probe end function ifStm");
+} 
+function whileStm() {
+    log("probe begin function whileStm (121, 9)");
+    i = 0;
+    log("probe call function size (124, 27)");
+    var temp_inject_var_14 = size(table);
+    while (i < temp_inject_var_14) {
+        if (table[i] == value) 
+            ind = i;
+        i = i + 1;
+    } 
+    while (i < m_neighbourCount and psResponse == -1 or j > 3) {
+        if (m_MessageState[i] == "GRAPH_JOINED") {
+            if (m_MessageReqLabel[i] == m_nLabel) 
+                if (m_MessageResponse[i] != "REQ_NONE") {
+                    psResponse = i;
+                } 
+        } 
+        i = i + 1;
+    } 
+    log("probe call function b (141, 44)");
+    var temp_inject_var_13 = b(x, y, z);
+    while (m_MessageResponse[i] != temp_inject_var_13) {
+    } 
+    log("probe end function whileStm");
+} 
+function foreachStm() {
+    log("probe begin function foreachStm (147, 9)");
+    log("probe call function neighbors.foreach (155, 15)");
+    neighbors.foreach(function(rid, data) {
+        if (rid == t_id) {
+            m_receivedMessage.Range = data.distance * 100.0;
+            m_receivedMessage.Bearing = data.azimuth;
+        } 
+    } );
+    log("probe call function f (157, 15)");
+    var temp_inject_var_12 = f(b);
+    log("probe call function barrier[temp_inject_var_12 + s.t.w[x]].w.foreach (161, 24)");
+    barrier[temp_inject_var_12 + s.t.w[x]].w.foreach(function(key, value, robot) {
+        log("probe call function barrier.get (159, 38)");
+        barrier.get(key);
+    } );
+    log("probe end function foreachStm");
+} 
+function callStm(x) {
+    log("probe begin function callStm (165, 9)");
+    log("probe call function UpdateGraph (167, 16)");
+    UpdateGraph();
+    log("probe call function s2i_graph (168, 44)");
+    var temp_inject_var_11 = s2i_graph(GRAPHSTATE);
+    m_selfMessage.State = temp_inject_var_11;
+    fName = function(arg) {
+        arg = arg - 3;
+    } ;
+    log("probe call function fName (172, 11)");
+    fName(k);
+    log("probe call function fNameArr[i][j][k] (173, 23)");
+    fNameArr[i][j][k](y);
+    log("probe call function fNameStruct.a.b.c (174, 23)");
+    fNameStruct.a.b.c(z);
+    log("probe call function fNameStruct[m][n].a[r].b[s].c[t] (175, 38)");
+    fNameStruct[m][n].a[r].b[s].c[t](z);
+    log("probe call function g (176, 25)");
+    var temp_inject_var_10 = g(n);
+    log("probe call function fExpr (176, 26)");
+    fExpr(x + y * z - temp_inject_var_10);
+    log("probe end function callStm");
+} 
+function returnStm() {
+    log("probe begin function returnStm (179, 9)");
+    if (x > 1) {
+        log("probe call function stigmergy.create (182, 41)");
+        var temp_inject_var_9 = stigmergy.create(BARRIER_VSTIG);
+        log("probe return end function returnStm");
+        return temp_inject_var_9;
+    } 
+    if (y > 1) {
+        var temp_inject_var_8 = function() {
+            log("probe call function barrier_wait (186, 51)");
+            barrier_wait(threshold, transf, resumef, bc);
+            log("probe call function barrier_create (187, 23)");
+            barrier_create();
+        } ;
+        log("probe return end function returnStm");
+        return temp_inject_var_8;
+    } 
+    if (z > 1) {
+        var temp_inject_var_7 = Q[nb][2] + B[x];
+        log("probe return end function returnStm");
+        return temp_inject_var_7;
+    } 
+    if (w > 1) {
+        var temp_inject_var_6 = A.B + B.C.D.E;
+        log("probe return end function returnStm");
+        return temp_inject_var_6;
+    } 
+    if (v > 1) {
+        log("probe return end function returnStm");
+        return struct2.field4.field5;
+    } 
+    if (s > 1) {
+        log("probe call function f (200, 28)");
+        var temp_inject_var_2 = f(c);
+        log("probe call function f (200, 21)");
+        var temp_inject_var_3 = f(b);
+        log("probe call function f (200, 14)");
+        var temp_inject_var_4 = f(a);
+        var temp_inject_var_5 = temp_inject_var_4 + temp_inject_var_3 + temp_inject_var_2;
+        log("probe return end function returnStm");
+        return temp_inject_var_5;
+    } 
+    log("probe return end function returnStm");
+    return barriergood;
+    log("probe end function returnStm");
+} 
+function lib() {
+    log("probe begin function lib (205, 9)");
+    log("probe call function barrier.get (214, 19)");
+    var temp_inject_var_0 = barrier.get("d");
+    log("probe call function barrier.size (208, 17)");
+    var temp_inject_var_1 = barrier.size();
+    log("probe call function log (216, 9)");
+    log("--->BS: ", temp_inject_var_1, " / ", threshold, " (", BARRIER_VSTIG, " - ", temp_inject_var_0, ") t= ", timeW);
+    log("probe end function lib");
+} 
+function barrier_allgood(barrier, bc) {
+    log("probe begin function barrier_allgood (220, 9)");
+    barriergood = 1;
+    log("probe call function barrier.foreach (231, 5)");
+    barrier.foreach(function(key, value, robot) {
+        log("probe call function barrier.get (223, 23)");
+        barrier.get(key);
+        if (key == "d") {
+            if (value == 1) 
+                return 1;
+        } else 
+            if (key != "n" and value != bc) 
+                barriergood = 0;
+    } );
+    log("probe return end function barrier_allgood");
+    return barriergood;
+    log("probe end function barrier_allgood");
+} 

@@ -1,0 +1,18 @@
+function lennardjones() {
+    log("probe begin function lennardjones (1, 9)");
+    log("probe call function math.vec2.new (4, 44)");
+    var temp_inject_var_3 = math.vec2.new(0.0, 0.0);
+    log("probe call function neighbors.map (3, 33)");
+    var temp_inject_var_4 = neighbors.map(lj_vector);
+    log("probe call function temp_inject_var_4.reduce (4, 45)");
+    var temp_inject_var_5 = temp_inject_var_4.reduce(lj_sum, temp_inject_var_3);
+    res = temp_inject_var_5;
+    log("probe call function math.vec2.new (7, 57)");
+    var temp_inject_var_0 = math.vec2.new(0.0, 0.0);
+    log("probe call function reduce2 (7, 58)");
+    var temp_inject_var_1 = reduce2(lj_sum, temp_inject_var_0);
+    log("probe call function map2 (6, 42)");
+    var temp_inject_var_2 = map2(lj_vector);
+    res2 = neighbors.mapArr[temp_inject_var_2].reduceArr[temp_inject_var_1];
+    log("probe end function lennardjones");
+} 

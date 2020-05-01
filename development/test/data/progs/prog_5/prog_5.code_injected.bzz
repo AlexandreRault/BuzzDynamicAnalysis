@@ -1,0 +1,42 @@
+math.vec2 = {};
+math.vec2.new = function(x, y) {
+    return {.x=x, .y=y};
+} ;
+math.vec2.newp = function(l, a) {
+    log("probe call function math.sin (25, 23)");
+    var temp_inject_var_3 = math.sin(a);
+    log("probe call function math.cos (24, 23)");
+    var temp_inject_var_4 = math.cos(a);
+    return {.x=l * temp_inject_var_4, .y=l * temp_inject_var_3};
+} ;
+math.vec2.length = function(v) {
+    log("probe call function math.sqrt (35, 40)");
+    var temp_inject_var_2 = math.sqrt(v.x * v.x + v.y * v.y);
+    return temp_inject_var_2;
+} ;
+math.vec2.angle = function(v) {
+    log("probe call function math.atan (44, 27)");
+    var temp_inject_var_1 = math.atan(v.y, v.x);
+    return temp_inject_var_1;
+} ;
+math.vec2.norm = function(v) {
+    log("probe call function math.length (53, 23)");
+    var temp_inject_var_0 = math.length(v);
+    var l = temp_inject_var_0;
+    return {.x=v.x / l, .y=v.y / l};
+} ;
+math.vec2.add = function(v1, v2) {
+    return {.x=v1.x + v2.x, .y=v1.y + v2.y};
+} ;
+math.vec2.sub = function(v1, v2) {
+    return {.x=v1.x - v2.x, .y=v1.y - v2.y};
+} ;
+math.vec2.scale = function(v, s) {
+    return {.x=v.x * s, .y=v.y * s};
+} ;
+math.vec2.dot = function(v1, v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+} ;
+math.vec2.equal = function(v1, v2) {
+    return (v1.x == v2.x) and (v1.y == v2.y);
+} ;

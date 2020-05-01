@@ -1,0 +1,47 @@
+#!/bin/tcsh
+
+#if ("$1" == '') then
+#    echo 'ERROR: missing argument'
+#    exit 1
+#endif
+#
+##set config = ''
+##set config = 'poly'
+#set config = 'laptop'
+#
+##if ("$config" == 'poly') then
+
+#setenv CLASSPATH /home/merlo/work/software/jUtil/defs:/home/merlo/work/software/jUtil/tkLines/src2:../java_rel_table:.
+#
+#
+#else if ("$config" == 'laptop') then
+#
+##setenv CLASSPATH /home/merlo/work/software/tkManip:/home/merlo/work/software/galacticTk/dev/jSrc3:/home/merlo/work/software/nestedTk/dev/generic_jSrc:/home/merlo/work/software/options:.
+#
+##setenv CLASSPATH /home/merlo/work/software/options:/home/merlo/work/software/analysis/parser/antlr/lib/antlrworks-1.4.2.jar:/home/merlo/lib/java:.
+#
+#
+#setenv CLASSPATH /home/merlo/work/release/jUtil/options:/home/merlo/work/release/jUtil/defs:/home/merlo/work/release/jUtil/tkLines/src2:/home/merlo/lib/java:/home/merlo/work/release/table_manip/java_rel_table/src7:..:.
+#
+#
+#else
+#    echo 'ERROR: invalid configuration' "$config"
+#    exit(1)
+#endif
+#
+
+source ./javaConfig.tcsh
+setenv CLASSPATH "$CLASSPATH":.
+#setenv CLASSPATH "$CLASSPATH":./flowInfo:.
+
+#setenv
+
+#if ( "$1" == '' ) then
+#    make clean
+#endif
+
+make clean
+
+make $1
+
+

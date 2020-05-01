@@ -1,0 +1,195 @@
+TARGETDIST_VSTIG = 2;
+ROBOTS = 10;
+DISTANCE_MAX = 60000.;
+TARGET_KIN = 100.;
+EPSILON_KIN = 100.;
+TARGET_NONKIN = 300.;
+EPSILON_NONKIN = 250.;
+function calc_lj(dist, target, epsilon) {
+    return -(epsilon / dist) * ((target / dist)^4 - (target / dist)^2);
+} 
+function to_lj_kin(rid, data) {
+    var lj;
+    lj = calc_lj(data.distance, TARGET_KIN, EPSILON_KIN);
+    data.x = lj * math.cos(data.azimuth);
+    data.y = lj * math.sin(data.azimuth);
+    return data;
+} 
+function to_lj_nonkin(rid, data) {
+    var lj;
+    lj = calc_lj(data.distance, TARGET_NONKIN, EPSILON_NONKIN);
+    data.x = lj * math.cos(data.azimuth);
+    data.y = lj * math.sin(data.azimuth);
+    return data;
+} 
+function vec2_sum(rid, data, accum) {
+    accum.x = accum.x + data.x;
+    accum.y = accum.y + data.y;
+    return accum;
+} 
+function flock() {
+    var accum = {};
+    accum.x = 0;
+    accum.y = 0;
+    accum = neighbors.kin().map(to_lj_kin).reduce(vec2_sum, accum);
+    accum = neighbors.nonkin().map(to_lj_nonkin).reduce(vec2_sum, accum);
+    if (neighbors.count() > 0) {
+        accum.x = accum.x / neighbors.count();
+        accum.y = accum.y / neighbors.count();
+    } 
+    goto(accum.x, accum.y);
+} 
+BARRIER_VSTIG = 1;
+function barrier_set(threshold, transf) {
+    statef = function() {
+        barrier_wait(threshold, transf);
+    } ;
+    barrier = stigmergy.create(BARRIER_VSTIG);
+    statestr = "barrier";
+} 
+function barrier_ready() {
+    barrier.put(id, 1);
+} 
+function barrier_wait(threshold, transf) {
+    barrier.get(id);
+    extradbg = barrier.size();
+    if (barrier.size() >= threshold) {
+        barrier = nil;
+        transf();
+    } 
+} 
+TARGET_NOCOLOR = 0;
+TARGET_RED = 1;
+TARGET_GREEN = 2;
+TARGET_BLUE = 3;
+function isred(c) {
+    return (c.red == 255 and c.green == 0 and c.blue == 0);
+} 
+function isgreen(c) {
+    return (c.red == 0 and c.green == 255 and c.blue == 0);
+} 
+function isblue(c) {
+    return (c.red == 0 and c.green == 0 and c.blue == 255);
+} 
+function color_to_code(c) {
+    if (isred(c)) 
+        return TARGET_RED;
+    if (isgreen(c)) 
+        return TARGET_GREEN;
+    if (isblue(c)) 
+        return TARGET_BLUE;
+    return TARGET_NOCOLOR;
+} 
+function state_takeoff() {
+    if (not takeoff()) {
+        barrier_set(ROBOTS, transition_to_search_for_target);
+        barrier_ready();
+    } 
+} 
+function transition_to_search_for_target() {
+    statef = state_search_for_target;
+    statestr = "search_for_target";
+    yaw_start = pose.orientation.yaw % (2. * math.pi);
+    camera_enable();
+    mytargetdata = {};
+    mytargetdata.dist = DISTANCE_MAX;
+    mytargetdata.color = TARGET_NOCOLOR;
+    mytargetdata.closest = nil;
+} 
+function state_search_for_target() {
+    if (size(blobs) == 0) {
+        var cur_yaw = pose.orientation.yaw % (2. * math.pi);
+        var yaw_diff = (cur_yaw - yaw_start) % (2. * math.pi);
+        if (yaw_diff >= (0.95 * 2. * math.pi)) {
+            barrier_set(ROBOTS, transition_to_pick_target);
+            barrier_ready();
+        } else 
+            rotate(math.pi / 180.0);
+    } else {
+        rotate(0.0);
+        if (blobs[0].px > 330) 
+            rotate(-math.pi / 180.0);
+        else 
+            if (blobs[0].px < 310) 
+                rotate(math.pi / 180.0);
+            else {
+                mytargetdata.dist = 0.;
+                mytargetdata.color = color_to_code(blobs[0].color);
+                barrier_set(ROBOTS, transition_to_pick_target);
+                barrier_ready();
+            } 
+    } 
+} 
+function transition_to_pick_target() {
+    statef = state_pick_target;
+    statestr = "pick_target";
+    targetdist = stigmergy.create(TARGETDIST_VSTIG);
+    if (mytargetdata.dist < DISTANCE_MAX) {
+        targetdist.put(id, mytargetdata);
+        barrier_set(ROBOTS, transition_to_divide);
+        barrier_ready();
+    } 
+} 
+function state_pick_target() {
+    var params = {};
+    params.dist = mytargetdata.dist;
+    params.color = mytargetdata.color;
+    params.closest = mytargetdata.closest;
+    params = neighbors.reduce(function(rid, rdata, accum) {
+        var d = targetdist.get(rid);
+        if (d != nil) {
+            if (accum.dist > rdata.distance + d.dist) {
+                accum.dist = rdata.distance + d.dist;
+                accum.closest = rid;
+                accum.color = d.color;
+            } 
+        } 
+        return accum;
+    } , params);
+    mytargetdata.closest = params.closest;
+    mytargetdata.color = params.color;
+    mytargetdata.dist = params.dist;
+    targetdist.put(id, mytargetdata);
+    if (params.dist < DISTANCE_MAX) {
+        barrier_set(ROBOTS, transition_to_divide);
+        barrier_ready();
+    } else {
+        if (mytargetdata.closest) {
+            var n = neighbors.get(mytargetdata.closest);
+            if (n.azimuth > math.pi / 36.0) {
+                rotate(math.pi / 360.0);
+            } else 
+                if (n.azimuth < -math.pi / 36.0) 
+                    rotate(-math.pi / 360.0);
+        } 
+    } 
+} 
+function transition_to_divide() {
+    statef = state_divide;
+    statestr = "divide";
+    sred = swarm.create(TARGET_RED);
+    sred.select(mytargetdata.color == TARGET_RED);
+    sblue = swarm.create(TARGET_BLUE);
+    sblue.select(mytargetdata.color == TARGET_BLUE);
+} 
+function state_divide() {
+    sred.exec(flock);
+    sblue.exec(flock);
+} 
+function transition_to_goto_target() {
+    statef = state_goto_target;
+    statestr = "goto_target";
+} 
+function state_goto_target() {
+} 
+function init() {
+    statef = state_takeoff;
+    statestr = "takeoff";
+} 
+function step() {
+    extradbg = "";
+    statef();
+    debug.print(statestr, ": ", extradbg);
+} 
+function destroy() {
+} 

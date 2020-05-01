@@ -1,0 +1,11 @@
+ALEX = 8;
+BARRIER_VSTIG = 101;
+GLOB_X = GLOB_Y;
+function something(param1, param2) {
+    log("probe begin function something (12, 9)");
+    log("probe call function t (13, 8)");
+    var temp_inject_var_0 = t();
+    log("probe call function l (13, 9)");
+    l(temp_inject_var_0);
+    log("probe end function something");
+} 

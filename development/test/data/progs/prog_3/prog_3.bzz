@@ -1,0 +1,57 @@
+math.vec2 = {}
+
+    math.vec2.new = function(x, y) {
+    return { .x = x, .y = y }
+};
+
+math.vec2.newp = function(l, a) {
+    return {
+    .x = l * math.cos(a),
+    .y = l * math.sin(a)
+    }
+};
+
+math.vec2.length = function(v) {
+    return math.sqrt(v.x * v.x + v.y * v.y)
+};
+
+math.vec2.angle = function(v) {
+    return math.atan(v.y, v.x)
+};
+
+math.vec2.norm = function(v) {
+    var l = math.length(v)
+    return {
+    .x = v.x / l,
+    .y = v.y / l
+    }
+};
+
+math.vec2.add = function(v1, v2) {
+    return {
+    .x = v1.x + v2.x,
+    .y = v1.y + v2.y
+    }
+};
+
+math.vec2.sub = function(v1, v2) {
+    return {
+    .x = v1.x - v2.x,
+    .y = v1.y - v2.y
+    }
+};
+
+math.vec2.scale = function(v, s) {
+    return {
+    .x = v.x * s,
+    .y = v.y * s
+    }
+};
+
+math.vec2.dot = function(v1, v2) {
+    return v1.x * v2.x + v1.y * v2.y
+};
+
+math.vec2.equal = function(v1, v2) {
+    return (v1.x == v2.x) and (v1.y == v2.y)
+};
